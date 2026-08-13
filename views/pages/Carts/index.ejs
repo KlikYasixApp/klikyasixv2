@@ -1,207 +1,220 @@
-<% var title = "Keranjang Belanja - Kantin"; var page = "cart"; %>
+<% 
+  var title = "Keranjang Belanja - Kantin"; 
+  var page = "cart"; 
+
+  // =========================================================================
+  // MOCKUP DATA KERANJANG (Langsung di EJS)
+  // Catatan: Jika data 'carts' dikirim dari controller Express, maka data tersebut
+  // yang dipakai. Jika belum ada, maka otomatis memakai data mockup ini.
+  // =========================================================================
+  var items = (typeof carts !== 'undefined' && carts) ? carts : [
+    {
+      id: 1,
+      productId: 101,
+      name: "Nasi Goreng Spesial + Telur",
+      category: "Makanan Utama",
+      price: 18000,
+      quantity: 2,
+      image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 2,
+      productId: 102,
+      name: "Es Teh Manis Jumbo",
+      category: "Minuman",
+      price: 5000,
+      quantity: 1,
+      image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: 3,
+      productId: 103,
+      name: "Ayam Geprek Sambal Matah",
+      category: "Makanan Utama",
+      price: 16000,
+      quantity: 1,
+      image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80"
+    }
+  ];
+
+  // TIPS UJI COBA EMPTY STATE:
+  // Ubah baris di bawah menjadi `items = [];` jika ingin tes tampilan keranjang kosong.
+%>
+
 <%- include('../../partials/header') %>
-      <div class="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
-        <!-- DAFTAR ITEM KERANJANG -->
-        <div class="space-y-4">
-          <!-- ITEM 1 -->
-          <div
-            class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
-          >
+
+<main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-black text-slate-900 sm:text-3xl">Keranjang Belanja</h1>
+      <p class="mt-1 text-sm text-slate-500">Periksa kembali pesanan Anda sebelum checkout.</p>
+    </div>
+    
+    <% if (items.length > 0) { %>
+      <a href="/products" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i>
+        Tambah Menu Lain
+      </a>
+    <% } %>
+  </div>
+
+  <% if (items.length > 0) { %>
+    <!-- TAMPILAN KERANJANG TERISI MOCKUP -->
+    <div class="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
+      
+      <!-- LIST ITEM KERANJANG -->
+      <div class="space-y-4">
+        <% 
+          let totalItems = 0;
+          let grandTotal = 0;
+          items.forEach(function(item) { 
+            const itemSubtotal = item.price * item.quantity;
+            totalItems += item.quantity;
+            grandTotal += itemSubtotal;
+        %>
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300 sm:p-5">
             <div class="flex gap-4">
-              <!-- Gambar Produk -->
-              <a
-                href="/products/1"
-                class="shrink-0 overflow-hidden rounded-xl bg-slate-100"
-              >
+              <!-- Gambar Makanan / Minuman -->
+              <div class="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-28 sm:w-28">
                 <img
-                  src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80"
-                  alt="Nasi Goreng Spesial"
-                  class="h-24 w-24 object-cover transition hover:scale-105 sm:h-28 sm:w-28"
+                  src="<%= item.image %>"
+                  alt="<%= item.name %>"
+                  class="h-full w-full object-cover"
                 />
-              </a>
+              </div>
 
-              <!-- Detail Produk -->
-              <div class="min-w-0 flex-1">
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <p class="text-xs font-semibold text-blue-600">Makanan</p>
-                    <a
-                      href="/products/1"
-                      class="mt-1 block font-bold text-slate-900 hover:text-blue-600"
-                    >
-                      Nasi Goreng Spesial
-                    </a>
-                  </div>
+              <!-- Detail Makanan -->
+              <div class="flex min-w-0 flex-1 flex-col justify-between">
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <span class="inline-block rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-blue-600 uppercase">
+                        <%= item.category %>
+                      </span>
+                      <h3 class="mt-1 font-bold text-slate-900 line-clamp-1 sm:text-base">
+                        <%= item.name %>
+                      </h3>
+                    </div>
 
-                  <!-- Tombol Hapus -->
-                  <button
-                    type="button"
-                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-red-50 hover:text-red-500"
-                    aria-label="Hapus item"
-                  >
-                    <i data-lucide="trash-2" class="h-4 w-4"></i>
-                  </button>
-                </div>
-
-                <div
-                  class="mt-5 flex flex-wrap items-center justify-between gap-3"
-                >
-                  <!-- Control Quantity -->
-                  <div
-                    class="flex items-center rounded-xl border border-slate-200"
-                  >
+                    <!-- Tombol Hapus -->
                     <button
                       type="button"
-                      class="flex h-9 w-9 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+                      title="Hapus Item"
+                    >
+                      <i data-lucide="trash-2" class="h-4 w-4"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mt-3 flex flex-wrap items-end justify-between gap-3">
+                  <!-- Control Jumlah (Quantity) -->
+                  <div class="flex items-center rounded-xl border border-slate-200 bg-slate-50/50">
+                    <button
+                      type="button"
+                      class="flex h-8 w-8 items-center justify-center rounded-l-xl text-slate-500 hover:bg-slate-200/60 hover:text-slate-900 active:scale-95 transition"
+                      <%= item.quantity <= 1 ? 'disabled' : '' %>
                     >
                       <i data-lucide="minus" class="h-3.5 w-3.5"></i>
                     </button>
 
-                    <span
-                      class="w-9 text-center text-sm font-bold text-slate-900"
-                    >
-                      2
+                    <span class="w-8 text-center text-xs font-bold text-slate-900">
+                      <%= item.quantity %>
                     </span>
 
                     <button
                       type="button"
-                      class="flex h-9 w-9 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                      class="flex h-8 w-8 items-center justify-center rounded-r-xl text-slate-500 hover:bg-slate-200/60 hover:text-slate-900 active:scale-95 transition"
                     >
                       <i data-lucide="plus" class="h-3.5 w-3.5"></i>
                     </button>
                   </div>
 
-                  <!-- Harga -->
+                  <!-- Perhitungan Harga -->
                   <div class="text-right">
-                    <p class="text-xs text-slate-400">Rp 15.000 × 2</p>
-                    <p class="mt-0.5 font-black text-slate-900">Rp 30.000</p>
+                    <p class="text-[11px] font-medium text-slate-400">
+                      Rp <%= item.price.toLocaleString('id-ID') %> × <%= item.quantity %>
+                    </p>
+                    <p class="text-base font-black text-slate-900">
+                      Rp <%= itemSubtotal.toLocaleString('id-ID') %>
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- ITEM 2 -->
-          <div
-            class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
-          >
-            <div class="flex gap-4">
-              <!-- Gambar Produk -->
-              <a
-                href="/products/2"
-                class="shrink-0 overflow-hidden rounded-xl bg-slate-100"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80"
-                  alt="Es Teh Manis Jumbo"
-                  class="h-24 w-24 object-cover transition hover:scale-105 sm:h-28 sm:w-28"
-                />
-              </a>
-
-              <!-- Detail Produk -->
-              <div class="min-w-0 flex-1">
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <p class="text-xs font-semibold text-blue-600">Minuman</p>
-                    <a
-                      href="/products/2"
-                      class="mt-1 block font-bold text-slate-900 hover:text-blue-600"
-                    >
-                      Es Teh Manis Jumbo
-                    </a>
-                  </div>
-
-                  <!-- Tombol Hapus -->
-                  <button
-                    type="button"
-                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-red-50 hover:text-red-500"
-                    aria-label="Hapus item"
-                  >
-                    <i data-lucide="trash-2" class="h-4 w-4"></i>
-                  </button>
-                </div>
-
-                <div
-                  class="mt-5 flex flex-wrap items-center justify-between gap-3"
-                >
-                  <!-- Control Quantity -->
-                  <div
-                    class="flex items-center rounded-xl border border-slate-200"
-                  >
-                    <button
-                      type="button"
-                      class="flex h-9 w-9 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
-                    >
-                      <i data-lucide="minus" class="h-3.5 w-3.5"></i>
-                    </button>
-
-                    <span
-                      class="w-9 text-center text-sm font-bold text-slate-900"
-                    >
-                      1
-                    </span>
-
-                    <button
-                      type="button"
-                      class="flex h-9 w-9 items-center justify-center text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
-                    >
-                      <i data-lucide="plus" class="h-3.5 w-3.5"></i>
-                    </button>
-                  </div>
-
-                  <!-- Harga -->
-                  <div class="text-right">
-                    <p class="text-xs text-slate-400">Rp 5.000 × 1</p>
-                    <p class="mt-0.5 font-black text-slate-900">Rp 5.000</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SIDEBAR RINGKASAN PESANAN -->
-        <aside class="lg:sticky lg:top-24">
-          <div
-            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
-          >
-            <h2 class="text-lg font-black text-slate-900">Ringkasan Pesanan</h2>
-
-            <div class="mt-6 space-y-3 text-sm">
-              <div class="flex items-center justify-between">
-                <span class="text-slate-500">Jumlah item</span>
-                <span class="font-semibold text-slate-900">3</span>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="text-slate-500">Subtotal</span>
-                <span class="font-semibold text-slate-900">Rp 35.000</span>
-              </div>
-            </div>
-
-            <div class="my-5 h-px bg-slate-200"></div>
-
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-slate-900">Total</span>
-              <span class="text-xl font-black text-blue-600">Rp 35.000</span>
-            </div>
-
-            <a
-              href="/checkout.html"
-              class="mt-6 flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3.5 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
-            >
-              Lanjut ke Checkout
-            </a>
-
-            <a
-              href="/products.html"
-              class="mt-3 flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-            >
-              Tambah Menu
-            </a>
-          </div>
-        </aside>
+        <% }); %>
       </div>
-    </main>
+
+      <!-- SIDEBAR RINGKASAN HARGA & CHECKOUT -->
+      <aside class="lg:sticky lg:top-24">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <h2 class="text-lg font-black text-slate-900">Ringkasan Pembayaran</h2>
+
+          <div class="mt-5 space-y-3 text-sm">
+            <div class="flex items-center justify-between text-slate-600">
+              <span>Total Porsi</span>
+              <span class="font-bold text-slate-900"><%= totalItems %> Item</span>
+            </div>
+
+            <div class="flex items-center justify-between text-slate-600">
+              <span>Subtotal Makanan</span>
+              <span class="font-bold text-slate-900">
+                Rp <%= grandTotal.toLocaleString('id-ID') %>
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between text-slate-600">
+              <span>Biaya Layanan</span>
+              <span class="font-bold text-emerald-600">Gratis</span>
+            </div>
+          </div>
+
+          <div class="my-5 h-px bg-slate-100"></div>
+
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-900">Total Pembayaran</span>
+            <span class="text-xl font-black text-blue-600">
+              Rp <%= grandTotal.toLocaleString('id-ID') %>
+            </span>
+          </div>
+
+          <!-- Tombol Aksi -->
+          <a
+            href="/checkout"
+            class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 active:scale-[0.99]"
+          >
+            <span>Lanjut ke Checkout</span>
+            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+          </a>
+
+          <p class="mt-3 text-center text-xs text-slate-400">
+            *Pesanan dapat diambil atau diantar ke meja kantin.
+          </p>
+        </div>
+      </aside>
+
+    </div>
+
+  <% } else { %>
+    <!-- TAMPILAN KERANJANG KOSONG (EMPTY STATE) -->
+    <div class="mx-auto my-12 max-w-sm rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+      <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+        <i data-lucide="shopping-bag" class="h-10 w-10"></i>
+      </div>
+      <h2 class="mt-5 text-lg font-bold text-slate-900">Keranjang Masih Kosong</h2>
+      <p class="mt-2 text-xs leading-relaxed text-slate-500">
+        Belum ada makanan atau minuman yang kamu pilih. Yuk, cari menu favoritmu sekarang!
+      </p>
+      <a
+        href="/products"
+        class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700"
+      >
+        Lihat Menu Kantin
+        <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </a>
+    </div>
+  <% } %>
+</main>
 
 <%- include('../../partials/footer') %>

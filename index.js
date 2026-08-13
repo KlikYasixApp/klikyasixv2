@@ -51,6 +51,14 @@ app.get("/products", (req, res) => {
   res.render("pages/Products/index");
 });
 
+app.get("/login", (req, res) => {
+  res.render("pages/Login/index");
+});
+
+app.get("/checkout", (req, res) => {
+  res.render("pages/Checkout/index");
+});
+
 app.use((req, res) => {
   res.status(404).send("404 - Page Not Found");
 });
