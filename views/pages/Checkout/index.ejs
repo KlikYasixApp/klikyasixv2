@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'Login - Klik Yasix' %></title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+  <div class="mx-auto flex min-h-screen max-w-md items-center px-4 py-12">
+    <div class="w-full">
+      <!-- LOGO & TITLE -->
+      <div class="mb-8 text-center">
+        <a href="/" class="inline-flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
+            <img
+              class="h-6 w-6"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJQmAp7KEiMrucNuFSDniURFfDCX6mbGlpSnqonfj501EbVNb1o_lF_JhE&s=10"
+              alt="Logo Klik Yasix"
+            />
+          </div>
+
+          <div class="text-left">
+            <p class="text-xl font-black text-slate-900 leading-none">
+              Klik <span class="text-blue-600">Yasix</span>
+            </p>
+            <p class="mt-1 text-xs font-semibold text-slate-500">
+              Kantin Digital
+            </p>
+          </div>
+        </a>
+
+        <h1 class="mt-8 text-2xl font-black text-slate-900">
+          Selamat Datang
+        </h1>
+
+        <p class="mt-2 text-sm text-slate-500">
+          Login untuk melanjutkan ke akunmu.
+        </p>
+      </div>
+
+      <!-- FORM LOGIN -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <form action="/login" method="POST" class="space-y-5">
+          <!-- EMAIL -->
+          <div>
+            <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">
+              Email
+            </label>
+
+            <div class="relative">
+              <i data-lucide="mail" class="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="nama@email.com"
+                value="<%= typeof email !== 'undefined' ? email : '' %>"
+                class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white"
+              />
+            </div>
+          </div>
+
+          <!-- PASSWORD -->
+          <div>
+            <label for="password" class="mb-2 block text-sm font-semibold text-slate-700">
+              Password
+            </label>
+
+            <div class="relative">
+              <i data-lucide="lock" class="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder="Masukkan password"
+                class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white"
+              />
+            </div>
+          </div>
+
+          <!-- ALERT ERROR -->
+          <% if (typeof error !== 'undefined' && error) { %>
+            <div class="rounded-xl bg-red-50 p-3.5 text-sm font-semibold text-red-600 flex items-center gap-2">
+              <i data-lucide="alert-circle" class="h-4 w-4 shrink-0"></i>
+              <span><%= error %></span>
+            </div>
+          <% } %>
+
+          <!-- BUTTON SUBMIT -->
+          <button
+            type="submit"
+            class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 font-bold text-white transition hover:bg-blue-700 cursor-pointer"
+          >
+            <span>Login</span>
+            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+          </button>
+        </form>
+
+        <!-- DEMO ACCOUNT INFO -->
+        <div class="mt-6 rounded-xl bg-slate-50 p-4 text-xs text-slate-500">
+          <p class="font-bold text-slate-700">Demo Account</p>
+          <p class="mt-2">Admin: admin@kantin.local / admin123</p>
+          <p>Seller: seller@kantin.local / seller123</p>
+          <p>Buyer: buyer@kantin.local / buyer123</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
