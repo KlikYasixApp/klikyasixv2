@@ -1,15 +1,22 @@
 {
   "name": "klikyasixv3",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build:css": "tailwindcss -i ./views/stylesheet/output.css -o ./views/stylesheet/global.css --minify"
+  },
   "license": "MIT",
   "dependencies": {
     "@tailwindcss/cli": "^4.3.3",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
-    "fs": "^0.0.1-security",
     "lucide": "^1.31.0",
-    "path": "^0.12.7",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
