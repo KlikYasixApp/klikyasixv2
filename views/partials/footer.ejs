@@ -1,0 +1,29 @@
+</main>
+  <!-- MAIN WRAPPER END -->
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white py-6">
+    <div class="mx-auto max-w-7xl px-4 text-center text-sm text-slate-500 sm:px-6 lg:px-8">
+      &copy; <%= new Date().getFullYear() %> Klik Yasix, Inc. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- CLIENT SCRIPTS -->
+  <script>
+    // Init Icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    // Toggle Mobile Menu
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+  </script>
+</body>
+</html>
