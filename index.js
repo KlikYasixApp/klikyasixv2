@@ -59,6 +59,18 @@ app.get("/checkout", (req, res) => {
   res.render("pages/Checkout/index");
 });
 
+app.get("/admin", (req, res) => {
+  res.render("pages/Admin/index");
+});
+
+app.get("/admin/sellers", (req, res) => {
+  res.render("pages/Admin/Sellermanage/index");
+});
+
+app.get("/admin/sellers/:id/edit", (req, res) => {
+  res.render("pages/Admin/Sellermanage/Edit/index");
+});
+
 app.use((req, res) => {
   res.status(404).send("404 - Page Not Found");
 });
