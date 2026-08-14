@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Seller - Mock UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="bg-slate-50 font-sans antialiased flex flex-col min-h-screen">
+    <main class="flex-grow mx-auto max-w-2xl w-full px-4 py-8 sm:px-6 lg:px-8">
+      <!-- Header Page / Back Button -->
+      <div class="mb-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <a
+            href="/admin/sellers"
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition shadow-sm"
+          >
+            <i data-lucide="arrow-left" class="h-5 w-5"></i>
+          </a>
+          <div>
+            <h1 class="text-xl font-bold text-slate-900">Form Edit Seller</h1>
+            <p class="text-xs text-slate-400">Mode Testing UI (Mock Form)</p>
+          </div>
+        </div>
+        <span
+          id="display-id"
+          class="rounded-lg bg-blue-50 px-3 py-1 text-xs font-bold text-blue-600 border border-blue-100"
+        >
+          ID: SLR-001
+        </span>
+      </div>
+
+      <!-- Form Edit -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <form
+          id="mock-form"
+          onsubmit="handleMockSubmit(event)"
+          class="space-y-5"
+        >
+          <!-- ID Seller (Read Only) -->
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2"
+              >ID Seller</label
+            >
+            <input
+              type="text"
+              id="seller-id-input"
+              class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-sm outline-none cursor-not-allowed"
+              readonly
+            />
+          </div>
+
+          <!-- Nama Seller -->
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2"
+              >Nama Seller / Toko</label
+            >
+            <input
+              type="text"
+              id="seller-name-input"
+              placeholder="Masukkan nama seller"
+              class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
+              required
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="seller-email-input"
+              placeholder="contoh@gmail.com"
+              class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
+              required
+            />
+          </div>
+
+          <!-- Status Active -->
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2"
+              >Status Akun</label
+            >
+            <select
+              id="seller-status-input"
+              class="w-full h-11 px-4 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition"
+            >
+              <option value="true">Aktif</option>
+              <option value="false">Nonaktif</option>
+            </select>
+          </div>
+
+          <!-- Notification Success Mock -->
+          <div
+            id="success-alert"
+            class="hidden rounded-xl bg-emerald-50 border border-emerald-200 p-4 text-xs font-medium text-emerald-800 flex items-center gap-2"
+          >
+            <i
+              data-lucide="check-circle-2"
+              class="h-4 w-4 text-emerald-600"
+            ></i>
+            <span>Perubahan mock berhasil disimpan! Mengalihkan...</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+            <a
+              href="/admin/sellers"
+              class="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition"
+            >
+              Batal
+            </a>
+            <button
+              type="submit"
+              class="px-5 py-2.5 rounded-xl bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition shadow-sm"
+            >
+              Simpan Perubahan (Mock)
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 bg-white py-6">
+      <div
+        class="mx-auto max-w-7xl px-4 text-center text-xs text-slate-500 sm:px-6 lg:px-8"
+      >
+        &copy; 2026 Klik Yasix, Inc. All rights reserved.
+      </div>
+    </footer>
+
+    <script>
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+      }
+
+      // Auto Fill Input dari URL Query (Mock Helper)
+      const urlParams = new URLSearchParams(window.location.search);
+      const sellerId = urlParams.get("id") || "SLR-001";
+      const sellerName = urlParams.get("name") || "Kantin Bu Agus";
+      const sellerEmail = urlParams.get("email") || "buagus@gmail.com";
+      const sellerActive = urlParams.get("active") || "true";
+
+      document.getElementById("display-id").textContent = "ID: " + sellerId;
+      document.getElementById("seller-id-input").value = sellerId;
+      document.getElementById("seller-name-input").value = sellerName;
+      document.getElementById("seller-email-input").value = sellerEmail;
+      document.getElementById("seller-status-input").value = sellerActive;
+
+      function handleMockSubmit(e) {
+        e.preventDefault();
+        const alert = document.getElementById("success-alert");
+        alert.classList.remove("hidden");
+
+        setTimeout(() => {
+          window.location.href = "/admin/sellers";
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>

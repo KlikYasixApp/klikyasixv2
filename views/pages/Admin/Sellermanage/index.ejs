@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Management - Klik Yasix</title>
+  <!-- CDN Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CDN Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans antialiased flex flex-col min-h-screen">
+
+  <% 
+    var sellersList = (typeof sellers !== 'undefined' && sellers) ? sellers : [
+      { id: "SLR-001", name: "Kantin Bu Agus", email: "buagus@gmail.com", active: true },
+      { id: "SLR-002", name: "Kantin Pak Min", email: "pakmin@gmail.com", active: true },
+      { id: "SLR-003", name: "Kedai Mbak Sri", email: "mbaksri@gmail.com", active: false }
+    ];
+  %>
+
+  <main class="flex-grow mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8">
+    <!-- SEARCH -->
+    <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div class="relative">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5"></i>
+
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Cari nama atau email seller..."
+          class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-600"
+        />
+      </div>
+    </div>
+
+    <!-- TABLE SELLER -->
+    <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[700px]">
+          <thead>
+            <tr class="border-b border-slate-100 bg-slate-50 text-left">
+              <th class="px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                Seller
+              </th>
+
+              <th class="px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                Email
+              </th>
+
+              <th class="px-6 py-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+                Status
+              </th>
+
+              <th class="px-6 py-4 text-right text-xs font-bold uppercase tracking-wide text-slate-400">
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100" id="seller-table-body">
+            <% sellersList.forEach(function(seller) { %>
+              <tr class="seller-row transition hover:bg-slate-50">
+                
+                <!-- SELLER NAME & AVATAR -->
+                <td class="px-6 py-5">
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 font-bold text-blue-600">
+                      <%= seller.name ? seller.name.charAt(0).toUpperCase() : '?' %>
+                    </div>
+
+                    <div>
+                      <p class="seller-name font-bold text-slate-900">
+                        <%= seller.name %>
+                      </p>
+
+                      <p class="text-xs text-slate-400">
+                        <%= seller.id %>
+                      </p>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- EMAIL -->
+                <td class="seller-email px-6 py-5 text-sm text-slate-600">
+                  <%= seller.email %>
+                </td>
+
+                <!-- STATUS BADGE -->
+                <td class="px-6 py-5">
+                  <% if (seller.active !== false) { %>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+                      <i data-lucide="user-check" class="h-3.5 w-3.5"></i>
+                      Aktif
+                    </span>
+                  <% } else { %>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-600">
+                      <i data-lucide="user-x" class="h-3.5 w-3.5"></i>
+                      Nonaktif
+                    </span>
+                  <% } %>
+                </td>
+
+                <!-- ACTIONS -->
+                <td class="px-6 py-5">
+                  <div class="flex justify-end gap-2">
+                    <!-- Edit Button -->
+                    <a
+                      href="/admin/sellers/<%= seller.id %>/edit"
+                      class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                      title="Edit"
+                    >
+                      <i data-lucide="edit-3" class="h-4 w-4"></i>
+                    </a>
+
+                    <!-- Toggle Active Button -->
+                    <button
+                      type="button"
+                      class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600"
+                      title="<%= seller.active ? 'Nonaktifkan' : 'Aktifkan' %>"
+                    >
+                      <% if (seller.active) { %>
+                        <i data-lucide="user-x" class="h-4 w-4"></i>
+                      <% } else { %>
+                        <i data-lucide="user-check" class="h-4 w-4"></i>
+                      <% } %>
+                    </button>
+
+                    <!-- Delete Button -->
+                    <button
+                      type="button"
+                      class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-rose-50 hover:text-rose-600"
+                      title="Hapus"
+                    >
+                      <i data-lucide="trash-2" class="h-4 w-4"></i>
+                    </button>
+
+                    <button type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                      <i data-lucide="more-vertical" class="h-4 w-4"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- INCLUDE PARTIAL FOOTER (jika menggunakan file partials) -->
+  <% if (typeof include !== 'undefined') { %>
+    <%- include('../../../partials/footer') %>
+  <% } else { %>
+    <!-- FOOTER INLINE FALLBACK -->
+    <footer class="mt-auto border-t border-slate-200 bg-white py-6">
+      <div class="mx-auto max-w-7xl px-4 text-center text-xs text-slate-500 sm:px-6 lg:px-8">
+        &copy; 2026 Klik Yasix, Inc. All rights reserved.
+      </div>
+    </footer>
+  <% } %>
+
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    document.getElementById('search-input')?.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('.seller-row');
+
+      rows.forEach(row => {
+        const name = row.querySelector('.seller-name')?.textContent.toLowerCase() || '';
+        const email = row.querySelector('.seller-email')?.textContent.toLowerCase() || '';
+
+        if (name.includes(query) || email.includes(query)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
