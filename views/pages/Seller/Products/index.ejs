@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Produk Saya - Seller' %></title>
+  
+  <!-- CDN Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans antialiased flex flex-col min-h-screen">
+
+  <% 
+    // Fallback data jika backend belum mengirim variabel products
+    var productList = (typeof products !== 'undefined' && products) ? products : [];
+  %>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-grow mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8">
+    
+    <!-- PAGE TITLE & ACTION BUTTON -->
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="text-xs font-bold tracking-wider uppercase text-indigo-600">SELLER MANAGEMENT</p>
+        <h1 class="mt-1 text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          Produk Saya
+        </h1>
+        <p class="mt-1 text-sm text-slate-500">
+          Kelola menu makanan dan ketersediaan stok produk di kantin Anda.
+        </p>
+      </div>
+
+      <a
+        href="/seller/products/new"
+        class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-indigo-100 hover:bg-indigo-700 transition active:scale-95"
+      >
+        <i data-lucide="plus" class="h-4 w-4"></i>
+        Tambah Produk
+      </a>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div class="relative flex items-center">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/4 h-5 w-5 text-slate-400"></i>
+        <input
+          id="search-input"
+          type="text"
+          onkeyup="filterProducts()"
+          placeholder="Cari nama produk atau kategori..."
+          class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm text-slate-800 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+        />
+      </div>
+    </div>
+
+    <!-- PRODUCT TABLE CARD -->
+    <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      
+      <!-- EMPTY STATE CONTAINER -->
+      <div id="empty-state" class="<%= productList.length === 0 ? '' : 'hidden' %> p-12 text-center">
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 mb-3">
+          <i data-lucide="package" class="h-8 w-8"></i>
+        </div>
+        <p class="font-bold text-slate-800 text-base">Belum ada produk</p>
+        <p class="text-xs text-slate-400 mt-1">Silakan tambahkan produk baru untuk mulai berjualan.</p>
+      </div>
+
+      <!-- TABLE CONTAINER -->
+      <div id="table-container" class="<%= productList.length > 0 ? '' : 'hidden' %> overflow-x-auto">
+        <table class="w-full min-w-[700px] border-collapse text-left">
+          <thead>
+            <tr class="border-b border-slate-100 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <th class="px-6 py-4">No</th>
+              <th class="px-6 py-4">Produk</th>
+              <th class="px-6 py-4">Kategori</th>
+              <th class="px-6 py-4">Harga</th>
+              <th class="px-6 py-4">Stok</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4 text-right">Aksi</th>
+            </tr>
+          </thead>
+
+          <tbody id="product-tbody" class="divide-y divide-slate-100 text-sm">
+            <% productList.forEach((product, index) => { %>
+              <tr id="product-row-<%= product.id %>" class="product-item hover:bg-slate-50/50 transition">
+                <td class="px-6 py-4 text-slate-400 font-medium"><%= index + 1 %></td>
+                
+                <!-- NAMA & DESKRIPSI PRODUK -->
+                <td class="px-6 py-4">
+                  <div class="font-bold text-slate-800 product-name"><%= product.name %></div>
+                  <% if (product.description) { %>
+                    <div class="text-xs text-slate-400 line-clamp-1"><%= product.description %></div>
+                  <% } %>
+                </td>
+
+                <!-- KATEGORI -->
+                <td class="px-6 py-4 text-slate-500 product-category">
+                  <span class="inline-flex items-center rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                    <%= product.category || 'Umum' %>
+                  </span>
+                </td>
+
+                <!-- HARGA -->
+                <td class="px-6 py-4 font-bold text-slate-900">
+                  Rp <%= Number(product.price).toLocaleString('id-ID') %>
+                </td>
+
+                <!-- STOK -->
+                <td class="px-6 py-4">
+                  <span class="font-semibold <%= product.stock < 5 ? 'text-amber-600' : 'text-slate-700' %>">
+                    <%= product.stock %> unit
+                  </span>
+                </td>
+
+                <!-- KOLOM STATUS PRODUK (READY / NONAKTIF) -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <% if (product.is_active) { %>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                      Ready / Aktif
+                    </span>
+                  <% } else { %>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+                      <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                      Nonaktif
+                    </span>
+                  <% } %>
+                </td>
+
+                <!-- KOLOM AKSI (TOGGLE, EDIT, HAPUS) -->
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end gap-2">
+                    
+                    <!-- 1. TOMBOL TOGGLE STATUS (AKTIF / NONAKTIF) -->
+                    <form
+                      action="/seller/products/<%= product.id %>/status?_method=PATCH"
+                      method="POST"
+                      class="inline"
+                    >
+                      <% if (product.is_active) { %>
+                        <!-- Jika Aktif -> Munculkan Tombol Nonaktifkan (Oranye) -->
+                        <button
+                          type="submit"
+                          class="inline-flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-700 hover:bg-amber-100 transition"
+                          title="Nonaktifkan Produk"
+                        >
+                          <i data-lucide="toggle-right" class="h-3.5 w-3.5 text-amber-600"></i>
+                          <span>Nonaktifkan</span>
+                        </button>
+                      <% } else { %>
+                        <!-- Jika Nonaktif -> Munculkan Tombol Aktifkan (Hijau) -->
+                        <button
+                          type="submit"
+                          class="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition"
+                          title="Aktifkan Produk"
+                        >
+                          <i data-lucide="toggle-left" class="h-3.5 w-3.5 text-emerald-600"></i>
+                          <span>Aktifkan</span>
+                        </button>
+                      <% } %>
+                    </form>
+
+                    <!-- 2. TOMBOL EDIT -->
+                    <a
+                      href="/seller/products/<%= product.id %>/edit"
+                      class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 hover:text-indigo-600 transition"
+                      title="Edit Produk"
+                    >
+                      <i data-lucide="pencil" class="h-3.5 w-3.5"></i>
+                      <span>Edit</span>
+                    </a>
+
+                    <!-- 3. TOMBOL HAPUS -->
+                    <form
+                      action="/seller/products/<%= product.id %>?_method=DELETE"
+                      method="POST"
+                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk \'<%= product.name %>\'?')"
+                      class="inline"
+                    >
+                      <button
+                        type="submit"
+                        class="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-100 transition"
+                        title="Hapus Produk"
+                      >
+                        <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                        <span>Hapus</span>
+                      </button>
+                    </form>
+
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- CLIENT-SIDE SCRIPT -->
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    function filterProducts() {
+      const searchValue = document.getElementById('search-input').value.toLowerCase();
+      const rows = document.querySelectorAll('.product-item');
+      let visibleCount = 0;
+
+      rows.forEach((row) => {
+        const name = row.querySelector('.product-name').textContent.toLowerCase();
+        const category = row.querySelector('.product-category').textContent.toLowerCase();
+
+        if (name.includes(searchValue) || category.includes(searchValue)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      const emptyState = document.getElementById('empty-state');
+      const tableContainer = document.getElementById('table-container');
+
+      if (visibleCount === 0) {
+        tableContainer.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+      } else {
+        tableContainer.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
