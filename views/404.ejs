@@ -1,0 +1,50 @@
+<% var title = typeof title !== 'undefined' ? title : "404 - Halaman Tidak
+Ditemukan"; var page = "404"; %>
+
+<main
+  class="flex min-h-[70vh] items-center justify-center px-4 py-12 text-center"
+>
+  <div class="max-w-md">
+    <!-- Icon 404 -->
+    <div
+      class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-blue-50 text-blue-600"
+    >
+      <i data-lucide="alert-triangle" class="h-12 w-12"></i>
+    </div>
+
+    <!-- Title & Deskripsi -->
+    <h1 class="text-6xl font-black tracking-tight text-slate-900">404</h1>
+    <h2 class="mt-2 text-xl font-bold text-slate-800">
+      Halaman Tidak Ditemukan
+    </h2>
+    <p class="mt-2 text-sm leading-relaxed text-slate-500">
+      Maaf, halaman yang kamu cari tidak ditemukan atau salah mengetik URL.
+    </p>
+
+    <!-- Navigation Buttons -->
+    <div
+      class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+    >
+      <a
+        href="/"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700 sm:w-auto"
+      >
+        <i data-lucide="home" class="h-4 w-4"></i>
+        Kembali ke Beranda
+      </a>
+      <a
+        href="/orders"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"
+      >
+        <i data-lucide="receipt" class="h-4 w-4"></i>
+        Pesanan Saya
+      </a>
+    </div>
+  </div>
+</main>
+
+<script>
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons();
+  }
+</script>

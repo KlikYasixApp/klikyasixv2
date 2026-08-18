@@ -1,424 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Script UMD Lucide Icon -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <title><%= title %> - Home</title>
-  </head>
-  <body class="flex min-h-screen flex-col bg-slate-50 text-slate-900">
-    <!-- Sticky Glassmorphism Header -->
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <!-- HERO SECTION -->
+  <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 via-white to-blue-50 border border-blue-100/60 p-6 sm:p-10 lg:p-12 mb-12">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <!-- TEKS UTAMA -->
+      <div class="max-w-2xl">
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-medium text-blue-700 shadow-sm">
+          <i data-lucide="sparkles" class="h-4 w-4"></i>
+          <span>Kantin sekolah jadi lebih mudah</span>
+        </div>
 
-    <!-- Main Content (Grows to fill screen height) -->
-    <main class="flex-1">
-      <% var title = "Home"; var page = "home"; %> <%-
-      include('../../partials/header') %>
-      <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <section
-          class="relative bg-gradient-to-br from-blue-50 via-white to-blue-50"
-        >
-          <div
-            class="mx-auto grid min-h-[520px] max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20"
+        <h1 class="text-4xl font-black leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+          Pesan makanan,
+          <span class="block text-blue-600">tinggal ambil.</span>
+        </h1>
+
+        <p class="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
+          Pilih makanan dan minuman favoritmu dari kantin sekolah. Pesan sekarang, lalu ambil ketika sudah siap.
+        </p>
+
+        <!-- Tombol Aksi -->
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a
+            href="/products"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
           >
-            <!-- TEKS UTAMA -->
-            <div class="max-w-2xl">
-              <!-- Badge Sparkles -->
-              <div
-                class="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-medium text-blue-700 shadow-sm"
-              >
-                <!-- Diubah dari 'sparkle' ke 'sparkles' -->
-                <i data-lucide="sparkles" class="h-4 w-4"></i>
-                <span>Kantin sekolah jadi lebih mudah</span>
-              </div>
+            <span>Lihat Menu</span>
+            <i data-lucide="arrow-right" class="h-5 w-5"></i>
+          </a>
 
-              <h1
-                class="text-4xl font-black leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
-              >
-                Pesan makanan,
-                <span class="block text-blue-600"> tinggal ambil. </span>
-              </h1>
-
-              <p
-                class="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg"
-              >
-                Pilih makanan dan minuman favoritmu dari kantin sekolah. Pesan
-                sekarang, lalu ambil ketika sudah siap.
-              </p>
-
-              <!-- Tombol Aksi -->
-              <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="/products"
-                  class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
-                >
-                  <span>Lihat Menu</span>
-                  <i data-lucide="arrow-right" class="h-5 w-5"></i>
-                </a>
-
-                <a
-                  href="/orders"
-                  class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:bg-slate-50"
-                >
-                  <i data-lucide="clock-3" class="h-5 w-5"></i>
-                  <span>Cek Pesanan</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- GAMBAR HERO & CARD OVERLAY -->
-            <div class="relative mx-auto w-full max-w-xl">
-              <!-- Glow background -->
-              <div
-                class="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-blue-200/60 blur-3xl"
-              ></div>
-              <div
-                class="absolute -bottom-8 -right-8 h-40 w-40 rounded-full bg-emerald-200/60 blur-3xl"
-              ></div>
-
-              <div
-                class="relative overflow-hidden rounded-[2rem] border border-white bg-white p-3 shadow-2xl shadow-slate-900/10"
-              >
-                <div class="relative overflow-hidden rounded-[1.5rem]">
-                  <img
-                    src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80"
-                    alt="Makanan kantin"
-                    class="h-[380px] w-full object-cover"
-                  />
-
-                  <!-- Floating Badge -->
-                  <div
-                    class="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/30 bg-white/90 p-4 shadow-lg backdrop-blur"
-                  >
-                    <div class="flex items-center justify-between">
-                      <div>
-                        <p class="text-xs font-medium text-slate-500">
-                          Favorit hari ini
-                        </p>
-
-                        <h3 class="mt-1 font-bold text-slate-900">
-                          Menu Kantin Pilihan
-                        </h3>
-                      </div>
-
-                      <div
-                        class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white"
-                      >
-                        <i data-lucide="utensils" class="h-5 w-5"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Pop Product -->
-        <section class="bg-white">
-          <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-            <!-- HEADER SECTION -->
-            <div class="mb-8 flex items-end justify-between gap-4">
-              <div>
-                <p class="text-sm font-semibold text-blue-600">
-                  PALING BANYAK DIPILIH
-                </p>
-
-                <h2
-                  class="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
-                >
-                  Menu Favorit
-                </h2>
-              </div>
-
-              <a
-                href="/products"
-                class="hidden items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex"
-              >
-                <span>Lihat semua</span>
-                <i data-lucide="chevron-right" class="h-4 w-4"></i>
-              </a>
-            </div>
-
-            <!-- PRODUCT GRID (MOCK DATA) -->
-            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <!-- CARD 1 -->
-              <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
-              >
-                <div class="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=80"
-                    alt="Nasi Goreng Spesial"
-                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <span
-                    class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-blue-700 backdrop-blur"
-                  >
-                    Makanan
-                  </span>
-                </div>
-
-                <div class="p-4">
-                  <h3 class="font-bold text-slate-900 line-clamp-1">
-                    Nasi Goreng Spesial
-                  </h3>
-                  <p class="mt-1 text-xs text-slate-500 line-clamp-2">
-                    Nasi goreng dengan telor, ayam suwir, dan kerupuk.
-                  </p>
-
-                  <div class="mt-4 flex items-center justify-between">
-                    <div>
-                      <span class="text-xs text-slate-400">Harga</span>
-                      <p class="font-bold text-slate-900">Rp 15.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- CARD 2 -->
-              <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
-              >
-                <div class="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80"
-                    alt="Ayam Geprek Sambal Korek"
-                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <span
-                    class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-blue-700 backdrop-blur"
-                  >
-                    Makanan
-                  </span>
-                </div>
-
-                <div class="p-4">
-                  <h3 class="font-bold text-slate-900 line-clamp-1">
-                    Ayam Geprek Sambal Korek
-                  </h3>
-                  <p class="mt-1 text-xs text-slate-500 line-clamp-2">
-                    Ayam crispy digeprek dengan sambal pedas mantap.
-                  </p>
-
-                  <div class="mt-4 flex items-center justify-between">
-                    <div>
-                      <span class="text-xs text-slate-400">Harga</span>
-                      <p class="font-bold text-slate-900">Rp 18.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- CARD 3 -->
-              <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
-              >
-                <div class="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80"
-                    alt="Es Teh Manis Jumbo"
-                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <span
-                    class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-blue-700 backdrop-blur"
-                  >
-                    Minuman
-                  </span>
-                </div>
-
-                <div class="p-4">
-                  <h3 class="font-bold text-slate-900 line-clamp-1">
-                    Es Teh Manis Jumbo
-                  </h3>
-                  <p class="mt-1 text-xs text-slate-500 line-clamp-2">
-                    Teh manis segar porsi besar penjelas dahaga.
-                  </p>
-
-                  <div class="mt-4 flex items-center justify-between">
-                    <div>
-                      <span class="text-xs text-slate-400">Harga</span>
-                      <p class="font-bold text-slate-900">Rp 5.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- CARD 4 -->
-              <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
-              >
-                <div class="relative h-48 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&q=80"
-                    alt="Dimsum Ayam"
-                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <span
-                    class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-blue-700 backdrop-blur"
-                  >
-                    Cemilan
-                  </span>
-                </div>
-
-                <div class="p-4">
-                  <h3 class="font-bold text-slate-900 line-clamp-1">
-                    Dimsum Ayam (4 pcs)
-                  </h3>
-                  <p class="mt-1 text-xs text-slate-500 line-clamp-2">
-                    Dimsum ayam kukus lembut disajikan dengan saos merah.
-                  </p>
-
-                  <div class="mt-4 flex items-center justify-between">
-                    <div>
-                      <span class="text-xs text-slate-400">Harga</span>
-                      <p class="font-bold text-slate-900">Rp 12.000</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- MOBILE VIEW ALL LINK -->
-            <div class="mt-8 text-center sm:hidden">
-              <a
-                href="/products"
-                class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
-              >
-                <span>Lihat semua menu</span>
-                <i data-lucide="chevron-right" class="h-4 w-4"></i>
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <!-- Category Card -->
-        <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <!-- HEADER SECTION -->
-          <div class="mb-7 flex items-end justify-between gap-4">
-            <div>
-              <p class="text-sm font-semibold text-blue-600">
-                PILIH SESUAI SELERA
-              </p>
-
-              <h2
-                class="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl"
-              >
-                Kategori Menu
-              </h2>
-            </div>
-
-            <a
-              href="/products"
-              class="hidden items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex"
-            >
-              <span>Semua menu</span>
-              <i data-lucide="chevron-right" class="h-4 w-4"></i>
-            </a>
-          </div>
-
-          <!-- CATEGORY GRID (MOCK DATA) -->
-          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <!-- KATEGORI 1 -->
-            <a
-              href="/products?category=makanan"
-              class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md"
-            >
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white"
-              >
-                <i data-lucide="utensils" class="h-7 w-7"></i>
-              </div>
-              <h3
-                class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600"
-              >
-                Makanan Berat
-              </h3>
-              <p class="mt-1 text-xs text-slate-500">15 Menu</p>
-            </a>
-
-            <!-- KATEGORI 2 -->
-            <a
-              href="/products?category=minuman"
-              class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md"
-            >
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white"
-              >
-                <i data-lucide="cup-soda" class="h-7 w-7"></i>
-              </div>
-              <h3
-                class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600"
-              >
-                Minuman Segar
-              </h3>
-              <p class="mt-1 text-xs text-slate-500">12 Menu</p>
-            </a>
-
-            <!-- KATEGORI 3 -->
-            <a
-              href="/products?category=cemilan"
-              class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md"
-            >
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white"
-              >
-                <i data-lucide="cookie" class="h-7 w-7"></i>
-              </div>
-              <h3
-                class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600"
-              >
-                Cemilan & Snack
-              </h3>
-              <p class="mt-1 text-xs text-slate-500">8 Menu</p>
-            </a>
-
-            <!-- KATEGORI 4 -->
-            <a
-              href="/products?category=paket"
-              class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md"
-            >
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white"
-              >
-                <i data-lucide="badge-percent" class="h-7 w-7"></i>
-              </div>
-              <h3
-                class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600"
-              >
-                Paket Hemat
-              </h3>
-              <p class="mt-1 text-xs text-slate-500">5 Menu</p>
-            </a>
-          </div>
-        </section>
-
-        <!-- Card Sect -->
-        <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div
-            class="overflow-hidden rounded-3xl bg-blue-600 px-6 py-12 text-center shadow-xl shadow-blue-600/20 sm:px-12"
+          <a
+            href="/orders"
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:bg-slate-50"
           >
-            <h2 class="text-3xl font-black text-white sm:text-4xl">
-              Lapar? Jangan antre lama.
-            </h2>
-
-            <p class="mx-auto mt-4 max-w-xl text-blue-50">
-              Pesan menu favoritmu sekarang dan ambil ketika pesanan sudah siap.
-            </p>
-
-            <a
-              href="/products"
-              class="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-bold text-blue-700 transition hover:bg-blue-50"
-            >
-              <span>Mulai Pesan</span>
-              <i data-lucide="arrow-right" class="h-5 w-5"></i>
-            </a>
-          </div>
-        </section>
+            <i data-lucide="clock-3" class="h-5 w-5"></i>
+            <span>Cek Pesanan</span>
+          </a>
+        </div>
       </div>
-    </main>
 
-    <!-- Footer -->
-  </body>
-</html>
+      <!-- GAMBAR HERO & FLOATING BADGE -->
+      <div class="relative mx-auto w-full max-w-xl">
+        <div class="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-blue-200/60 blur-3xl"></div>
+        <div class="absolute -bottom-8 -right-8 h-40 w-40 rounded-full bg-emerald-200/60 blur-3xl"></div>
+
+        <div class="relative overflow-hidden rounded-[2rem] border border-white bg-white p-3 shadow-2xl shadow-slate-900/10">
+          <div class="relative overflow-hidden rounded-[1.5rem]">
+            <img
+              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80"
+              alt="Makanan kantin"
+              class="h-[360px] w-full object-cover"
+            />
+            <div class="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/30 bg-white/90 p-4 shadow-lg backdrop-blur">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-medium text-slate-500">Favorit hari ini</p>
+                  <h3 class="mt-1 font-bold text-slate-900">Menu Kantin Pilihan</h3>
+                </div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
+                  <i data-lucide="utensils" class="h-5 w-5"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR PRODUCTS (DINAMIS DARI DATABASE) -->
+  <section class="mb-16">
+    <div class="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold text-blue-600">PALING BANYAK DIPILIH</p>
+        <h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Menu Favorit</h2>
+      </div>
+      <a href="/products" class="hidden items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex">
+        <span>Lihat semua</span>
+        <i data-lucide="chevron-right" class="h-4 w-4"></i>
+      </a>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <% if (typeof products !== 'undefined' && products.length > 0) { %>
+        <% products.slice(0, 4).forEach(item => { %>
+          <div class="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+            <div>
+              <div class="relative h-48 w-full overflow-hidden bg-slate-100">
+                <img
+                  src="<%= item.image || item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80' %>"
+                  alt="<%= item.name %>"
+                  class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold capitalize text-blue-700 backdrop-blur">
+                  <%= item.category || 'Menu' %>
+                </span>
+              </div>
+
+              <div class="p-4">
+                <div class="mb-1 text-[11px] font-medium text-slate-400">
+                  <%= item.store_name %>
+                </div>
+                <h3 class="font-bold text-slate-900 line-clamp-1"><%= item.name %></h3>
+                <p class="mt-1 text-xs text-slate-500 line-clamp-2">
+                  <%= item.description || 'Menu lezat siap santap dari kantin sekolah.' %>
+                </p>
+              </div>
+            </div>
+
+            <div class="p-4 pt-0">
+              <div class="mt-2 flex items-center justify-between border-t border-slate-100 pt-3">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Harga</span>
+                  <p class="font-bold text-slate-900">Rp <%= Number(item.price).toLocaleString('id-ID') %></p>
+                </div>
+                
+                <form action="/carts/add" method="POST">
+                  <input type="hidden" name="product_id" value="<%= item.id %>">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition hover:bg-blue-600 hover:text-white cursor-pointer">
+                    <i data-lucide="shopping-bag" class="h-4 w-4"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white py-12 text-center text-slate-400">
+          <i data-lucide="store" class="mx-auto h-10 w-10 text-slate-300 mb-2"></i>
+          <p>Belum ada produk yang tersedia saat ini.</p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- CATEGORY GRID -->
+  <section class="mb-16">
+    <div class="mb-7 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold text-blue-600">PILIH SESUAI SELERA</p>
+        <h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Kategori Menu</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <a href="/products?category=makanan" class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+          <i data-lucide="utensils" class="h-7 w-7"></i>
+        </div>
+        <h3 class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600">Makanan Berat</h3>
+      </a>
+
+      <a href="/products?category=minuman" class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+          <i data-lucide="cup-soda" class="h-7 w-7"></i>
+        </div>
+        <h3 class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600">Minuman Segar</h3>
+      </a>
+
+      <a href="/products?category=cemilan" class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+          <i data-lucide="cookie" class="h-7 w-7"></i>
+        </div>
+        <h3 class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600">Cemilan & Snack</h3>
+      </a>
+
+      <a href="/products?category=paket" class="group flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-md">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+          <i data-lucide="badge-percent" class="h-7 w-7"></i>
+        </div>
+        <h3 class="mt-4 font-bold text-slate-900 transition group-hover:text-blue-600">Paket Hemat</h3>
+      </a>
+    </div>
+  </section>
+
+  <!-- CALL TO ACTION BANNER -->
+  <section>
+    <div class="overflow-hidden rounded-3xl bg-blue-600 px-6 py-12 text-center shadow-xl shadow-blue-600/20 sm:px-12">
+      <h2 class="text-3xl font-black text-white sm:text-4xl">Lapar? Jangan antre lama.</h2>
+      <p class="mx-auto mt-4 max-w-xl text-blue-50">
+        Pesan menu favoritmu sekarang dan ambil ketika pesanan sudah siap.
+      </p>
+      <a href="/products" class="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-bold text-blue-700 transition hover:bg-blue-50">
+        <span>Mulai Pesan</span>
+        <i data-lucide="arrow-right" class="h-5 w-5"></i>
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- LUCIDE ICONS RE-INITIALIZATION -->
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>

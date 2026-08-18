@@ -10,6 +10,7 @@ require("dotenv").config();
 const { isAuthenticated, authorizeRole } = require("./src/middleware/auth");
 const authRoutes = require("./src/routes/auth");
 const sellerRoutes = require("./src/routes/sellerRoutes");
+const buyerRoutes = require("./src/routes/buyerRoutes");
 
 // Database Connection
 const db = require("./src/database/db_connection");
@@ -43,7 +44,7 @@ app.set("view engine", "ejs");
 const viewsDir = path.join(__dirname, "views");
 app.set("views", viewsDir);
 
-// Setup Layout Wrapper (ala React)
+// Setup Layout Wrapper
 app.use(expressLayouts);
 app.set("layout", "layouts/main"); // Mengarahkan ke views/layouts/main.ejs
 
@@ -59,9 +60,6 @@ app.use(express.static(path.join(viewsDir)));
 // ==========================================
 // 4. GLOBAL MIDDLEWARE (User, Title & Seller Status)
 // ==========================================
-// ==========================================
-// GLOBAL MIDDLEWARE (User, Title & Seller Status)
-// ==========================================
 app.use(async (req, res, next) => {
   // 1. Menyediakan User Session & Title di seluruh View EJS
   res.locals.user = req.session.user || null;
@@ -70,7 +68,6 @@ app.use(async (req, res, next) => {
   // 2. Jika login sebagai Seller, ambil status Toko dari database (pake user_id)
   if (res.locals.user && res.locals.user.role === "seller") {
     try {
-      // 💡 Menggunakan user_id sesuai kolom aktual di tabel stores
       const [stores] = await db.query(
         "SELECT is_open FROM stores WHERE user_id = ?",
         [res.locals.user.id],
@@ -93,45 +90,13 @@ app.use(async (req, res, next) => {
 // 5. MOUNT ROUTERS
 // ==========================================
 
-// Auth Routes (/login, /register, /logout)
+// 1. Auth Routes (/login, /register, /logout)
 app.use("/", authRoutes);
 
-// Public Routes
-app.get("/", (req, res) => {
-  // Jika seller login dan akses /, opsional bisa langsung diarahkan ke Dashboard Seller
-  if (res.locals.user && res.locals.user.role === "seller") {
-    return res.redirect("/seller");
-  }
-  res.render("pages/Home/index", {
-    title: WEB_TITLE,
-    page: "home",
-  });
-});
+// 2. Seller Center Routes (WAJIB DIPANGGUL SEBELUM BUYER ROUTES)
+app.use("/seller", sellerRoutes);
 
-app.get("/products", (req, res) => {
-  res.render("pages/Products/index", {
-    title: `Katalog Produk - ${WEB_TITLE}`,
-    page: "menu",
-  });
-});
-
-// Buyer Protected Routes (Wajib Login)
-app.get("/carts", isAuthenticated, (req, res) => {
-  res.render("pages/Carts/index", { title: `Keranjang - ${WEB_TITLE}` });
-});
-
-app.get("/checkout", isAuthenticated, (req, res) => {
-  res.render("pages/Checkout/index", { title: `Checkout - ${WEB_TITLE}` });
-});
-
-app.get("/orders", isAuthenticated, (req, res) => {
-  res.render("pages/Orders/index", {
-    title: `Pesanan Saya - ${WEB_TITLE}`,
-    page: "orders",
-  });
-});
-
-// Admin Protected Routes (Wajib Role Admin)
+// 3. Admin Protected Routes (Wajib Role Admin)
 app.get("/admin", isAuthenticated, authorizeRole("admin"), (req, res) => {
   res.render("pages/Admin/index", { title: `Admin Dashboard - ${WEB_TITLE}` });
 });
@@ -158,16 +123,15 @@ app.get(
   },
 );
 
-// Seller Center Routes
-app.use("/seller", sellerRoutes);
+// 4. Public & Buyer Routes (PASANG PALING AKHIR)
+app.use("/", buyerRoutes);
 
 // ==========================================
 // 6. 404 HANDLER
 // ==========================================
-app.use((req, res) => {
+app.use((req, res, next) => {
   res.status(404).render("pages/404", {
-    title: `404 - Halaman Tidak Ditemukan`,
-    layout: false, // Bebas tidak memakai layout wrapper untuk 404
+    title: `404 Not Found - ${res.locals.WEB_TITLE || "Klik Yasix"}`,
   });
 });
 

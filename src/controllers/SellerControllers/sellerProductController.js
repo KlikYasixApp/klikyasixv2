@@ -1,4 +1,4 @@
-const db = require("../database/db_connection");
+const db = require("../../database/db_connection");
 
 // Render Halaman Edit Produk
 const editProductPage = async (req, res) => {

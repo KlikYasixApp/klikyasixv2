@@ -1,0 +1,141 @@
+<% 
+  var title = typeof title !== 'undefined' ? title : "Detail Produk"; 
+  var page = "menu"; 
+  const isAvailable = product.stock > 0 && product.is_open === 1;
+%>
+
+<main class="min-h-screen bg-slate-50 py-8">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Tombol Kembali -->
+    <a
+      href="/products"
+      class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-blue-600"
+    >
+      <i data-lucide="arrow-left" class="h-4 w-4"></i>
+      Kembali ke Semua Menu
+    </a>
+
+    <!-- Container Utama Detail Produk -->
+    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xs">
+      <div class="grid gap-8 p-6 sm:p-8 md:grid-cols-2">
+        
+        <!-- Gambar Produk -->
+        <div class="relative aspect-square w-full overflow-hidden rounded-2xl bg-slate-100">
+          <% if (product.image) { %>
+            <img
+              src="<%= product.image %>"
+              alt="<%= product.name %>"
+              class="h-full w-full object-cover"
+            />
+          <% } else { %>
+            <div class="flex h-full w-full items-center justify-center bg-slate-100">
+              <i data-lucide="package" class="h-16 w-16 text-slate-300"></i>
+            </div>
+          <% } %>
+
+          <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3.5 py-1 text-xs font-bold text-slate-700 shadow-xs backdrop-blur-xs">
+            <%= product.store_name %>
+          </span>
+        </div>
+
+        <!-- Detail Information -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-600">
+                <%= product.category || 'Menu' %>
+              </span>
+              <% if (product.is_open === 0) { %>
+                <span class="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-bold text-red-600">
+                  Toko Tutup
+                </span>
+              <% } %>
+            </div>
+
+            <h1 class="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
+              <%= product.name %>
+            </h1>
+
+            <p class="mt-4 text-sm leading-relaxed text-slate-600">
+              <%= product.description || 'Tidak ada deskripsi produk.' %>
+            </p>
+
+            <div class="mt-6 border-t border-slate-100 pt-4">
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">HARGA MENU</p>
+              <p class="mt-1 text-3xl font-black text-blue-600">
+                Rp <%= Number(product.price).toLocaleString('id-ID') %>
+              </p>
+              <p class="mt-1 text-xs font-medium <%= isAvailable ? 'text-slate-500' : 'text-red-500' %>">
+                Stok: <span class="font-bold"><%= product.stock %></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Form Add To Cart -->
+          <form action="/carts" method="POST" class="mt-8">
+            <input type="hidden" name="product_id" value="<%= product.id %>" />
+            
+            <div class="flex items-center gap-4 mb-4">
+              <label for="quantity" class="text-xs font-bold text-slate-600">Jumlah:</label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                value="1"
+                min="1"
+                max="<%= product.stock %>"
+                <%= !isAvailable ? 'disabled' : '' %>
+                class="w-20 rounded-xl border border-slate-200 px-3 py-2 text-center text-sm font-bold text-slate-800 outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <% if (isAvailable) { %>
+              <button
+                type="submit"
+                class="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700"
+              >
+                <i data-lucide="shopping-bag" class="h-5 w-5"></i>
+                Tambah ke Keranjang
+              </button>
+            <% } else { %>
+              <button
+                type="button"
+                disabled
+                class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-2xl bg-slate-200 py-3.5 text-sm font-bold text-slate-400"
+              >
+                Stok Habis / Toko Tutup
+              </button>
+            <% } %>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Menu Lain di Toko Ini -->
+    <% if (relatedProducts.length > 0) { %>
+      <div class="mt-12">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">Menu Lainnya dari <%= product.store_name %></h2>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <% relatedProducts.forEach(item => { %>
+            <a href="/products/<%= item.id %>" class="group block rounded-2xl border border-slate-200 bg-white p-3 transition hover:-translate-y-1 hover:border-blue-200">
+              <div class="aspect-square w-full overflow-hidden rounded-xl bg-slate-100">
+                <img src="<%= item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80' %>" alt="<%= item.name %>" class="h-full w-full object-cover" />
+              </div>
+              <h3 class="mt-2 font-bold text-slate-900 text-sm line-clamp-1"><%= item.name %></h3>
+              <p class="mt-1 text-xs font-bold text-blue-600">Rp <%= Number(item.price).toLocaleString('id-ID') %></p>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    <% } %>
+
+  </div>
+</main>
+
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>

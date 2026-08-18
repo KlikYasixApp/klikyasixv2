@@ -1,0 +1,131 @@
+<% 
+  var title = typeof title !== 'undefined' ? title : "Detail Pesanan - Kantin"; 
+  var page = "orders"; 
+%>
+
+<main class="min-h-screen bg-slate-50 py-8">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    
+    <!-- Tombol Kembali -->
+    <a
+      href="/orders"
+      class="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-blue-600"
+    >
+      <i data-lucide="arrow-left" class="h-4 w-4"></i>
+      Kembali ke Daftar Pesanan
+    </a>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <!-- Header Order -->
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">NOMOR PESANAN</span>
+          <h1 class="text-2xl font-black text-slate-900">#ORD-<%= order.id %></h1>
+          <p class="mt-1 text-xs text-slate-500">
+            Dibuat pada: <%= new Date(order.created_at).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) %>
+          </p>
+        </div>
+
+        <!-- Status Badge -->
+        <% if (order.status === 'pending') { %>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-yellow-50 px-3.5 py-1.5 text-xs font-bold text-yellow-700 border border-yellow-200">
+            <i data-lucide="clock-3" class="h-4 w-4"></i>
+            Menunggu Konfirmasi
+          </span>
+        <% } else if (order.status === 'processing') { %>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3.5 py-1.5 text-xs font-bold text-blue-700 border border-blue-200">
+            <i data-lucide="utensils" class="h-4 w-4"></i>
+            Sedang Disiapkan
+          </span>
+        <% } else if (order.status === 'completed') { %>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-xs font-bold text-emerald-700 border border-emerald-200">
+            <i data-lucide="check-circle-2" class="h-4 w-4"></i>
+            Selesai / Siap Diambil
+          </span>
+        <% } else { %>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-bold text-slate-600">
+            <%= order.status %>
+          </span>
+        <% } %>
+      </div>
+
+      <!-- Informasi Pengiriman / Pemesan -->
+      <div class="my-6 grid gap-4 rounded-xl bg-slate-50 p-4 sm:grid-cols-2 text-sm">
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Nama Pemesan</p>
+          <p class="font-bold text-slate-900 mt-0.5"><%= order.customer_name || '-' %></p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Toko / Kantin</p>
+          <p class="font-bold text-slate-900 mt-0.5"><%= order.store_name || 'Kantin' %></p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Tipe Pesanan</p>
+          <p class="font-bold text-slate-900 mt-0.5 uppercase"><%= order.order_type || 'Dine-in' %></p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 font-medium">Nomor Meja / Catatan Lokasi</p>
+          <p class="font-bold text-slate-900 mt-0.5"><%= order.table_number || '-' %></p>
+        </div>
+      </div>
+
+      <% if (order.notes) { %>
+        <div class="mb-6 rounded-xl border border-amber-200 bg-amber-50/50 p-4 text-xs text-amber-800">
+          <span class="font-bold">Catatan Pesanan:</span> <%= order.notes %>
+        </div>
+      <% } %>
+
+      <!-- Rincian Item Menu -->
+      <div class="border-t border-slate-100 pt-5">
+        <h3 class="mb-4 font-bold text-slate-900 text-base">Rincian Menu</h3>
+        <div class="divide-y divide-slate-100">
+          <% items.forEach(item => { %>
+            <div class="flex items-center justify-between py-3">
+              <div class="flex items-center gap-3">
+                <img
+                  src="<%= item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80' %>"
+                  alt="<%= item.product_name %>"
+                  class="h-12 w-12 rounded-xl object-cover bg-slate-100 shrink-0"
+                />
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm"><%= item.product_name %></h4>
+                  <p class="text-xs text-slate-400">
+                    <%= item.quantity %> × Rp <%= Number(item.price).toLocaleString('id-ID') %>
+                  </p>
+                </div>
+              </div>
+              <span class="font-bold text-slate-900 text-sm">
+                Rp <%= (Number(item.price) * item.quantity).toLocaleString('id-ID') %>
+              </span>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- Ringkasan Total -->
+      <div class="mt-6 border-t border-slate-200 pt-4">
+        <div class="flex items-center justify-between text-base font-black text-slate-900">
+          <span>Total Pembayaran</span>
+          <span class="text-xl text-blue-600">
+            Rp <%= Number(order.total_price).toLocaleString('id-ID') %>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  <% if (order.status !== 'completed' && order.status !== 'cancelled') { %>
+    console.log("Status pesanan: '<%= order.status %>'. Auto-refresh aktif setiap 10 detik...");
+    
+    setInterval(() => {
+      window.location.reload();
+    }, 10000); // Reload setiap 10 detik
+  <% } %>
+  
+</script>

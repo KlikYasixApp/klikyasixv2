@@ -160,6 +160,22 @@
         text.textContent = 'Toko Tutup';
       }
     }
+
+    <% 
+    const hasActiveOrders = recentOrders && recentOrders.some(order => order.status === 'pending');
+  %>
+
+  <% if (hasActiveOrders || (stats && stats.newOrdersCount > 0)) { %>
+    console.log("Ada pesanan aktif/baru. Auto-refresh seller dashboard aktif...");
+    setInterval(() => {
+      window.location.reload();
+    }, 10000); // Reload tiap 10 detik
+  <% } else { %>
+    // Jika tidak ada pesanan aktif, reload dengan durasi lebih lambat (misal 30 detik) untuk hemat resource
+    setInterval(() => {
+      window.location.reload();
+    }, 30000);
+  <% } %>
   </script>
 </body>
 </html>
