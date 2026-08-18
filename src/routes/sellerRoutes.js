@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { isAuthenticated, authorizeRole } = require("../middleware/auth");
+const upload = require("../middleware/upload"); // 💡 Import Middleware Upload Baru
 
 // Controller Imports
 const sellerProductController = require("../controllers/SellerControllers/sellerProductController");
@@ -21,14 +22,31 @@ router.patch(
   sellerOrderController.updateOrderStatus,
 );
 
-// 3. Route Produk (/seller/products) - SEMUA MENGGUNAKAN sellerProductController
+// 3. Route Produk (/seller/products)
 router.get("/products", sellerProductController.getProducts);
-router.get("/products/new", sellerProductController.renderCreateForm); // Form Tambah
-router.post("/products", sellerProductController.addProduct); // Proses Simpan Baru
+router.get("/products/new", sellerProductController.renderCreateForm);
 
-router.get("/products/:id/edit", sellerProductController.editProductPage); // Form Edit
-router.put("/products/:id", sellerProductController.updateProduct); // Proses Update Edit
-router.post("/products/:id/edit", sellerProductController.updateProduct); // Fallback POST
+// 💡 Tambah Produk Baru dengan Middleware Upload
+router.post(
+  "/products",
+  upload.single("image"),
+  sellerProductController.addProduct,
+);
+
+// 4. Route Edit, Update & Delete Produk
+router.get("/products/:id/edit", sellerProductController.editProductPage);
+
+// 💡 Update Produk dengan Middleware Upload
+router.put(
+  "/products/:id",
+  upload.single("image"),
+  sellerProductController.updateProduct,
+);
+router.post(
+  "/products/:id/edit",
+  upload.single("image"),
+  sellerProductController.updateProduct,
+);
 
 router.patch("/products/:id/status", sellerProductController.toggleStatus);
 router.post("/products/:id/status", sellerProductController.toggleStatus);

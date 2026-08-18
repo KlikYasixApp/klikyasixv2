@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.render("pages/Login/index", {
-        title: "Login - Klik Yasix",
+        title: "Login - KlikYasix",
         layout: false, // 👈 TAMBAHKAN INI agar header tidak ter-render saat password salah
         error: "Email atau password salah!",
         email,
@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.error("Error saat login:", err);
     res.render("pages/Login/index", {
-      title: "Login - Klik Yasix",
+      title: "Login - KlikYasix",
       layout: false, // 👈 TAMBAHKAN INI juga di penanganan error server
       error: "Terjadi kesalahan server.",
       email,

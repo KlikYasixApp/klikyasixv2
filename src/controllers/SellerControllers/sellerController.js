@@ -41,7 +41,7 @@ const createProduct = async (req, res) => {
     const cleanStock = Number(stock.toString().replace(/[^0-9]/g, ""));
 
     await ProductModel.create({
-      seller_id: sellerId,
+      store_id: sellerId,
       name,
       category,
       price: cleanPrice,

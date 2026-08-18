@@ -28,10 +28,10 @@ const getProducts = async (req, res) => {
         .send("Toko tidak ditemukan untuk akun seller ini.");
     }
 
-    // Ambil produk berdasarkan store_id ATAU seller_id yang cocok dengan storeId
+    // 💡 PERBAIKAN: Gunakan userId untuk mencocokkan store_id
     const [products] = await db.query(
-      "SELECT * FROM products WHERE store_id = ? OR seller_id = ? ORDER BY id DESC",
-      [storeId, storeId],
+      "SELECT * FROM products WHERE store_id = ? OR store_id = ? ORDER BY id DESC",
+      [storeId, userId],
     );
 
     console.log(
@@ -72,43 +72,23 @@ const addProduct = async (req, res) => {
     }
 
     const userId = req.session.user.id;
-    const storeId = await getStoreIdByUserId(userId);
-
-    if (!storeId) {
-      return res.status(404).send("Toko tidak ditemukan.");
-    }
+    const storeId = await getStoreIdByUserId(userId); // Ambil ID toko yang benar
 
     const { name, category, price, stock, description } = req.body;
-    const image = req.file ? req.file.filename : req.body.image || null;
+    const image = req.file ? req.file.filename : null;
 
-    const cleanPrice = Number(
-      price ? price.toString().replace(/[^0-9]/g, "") : 0,
-    );
-    const cleanStock = Number(
-      stock ? stock.toString().replace(/[^0-9]/g, "") : 0,
-    );
-
-    // Simpan store_id DAN seller_id dengan storeId (ID Toko)
+    // ✅ PERBAIKAN: Pastikan 'store_id' hanya ditulis SATU KALI saja
     await db.query(
       `INSERT INTO products 
-       (store_id, seller_id, name, category, price, stock, is_active, image, description) 
-       VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)`,
-      [
-        storeId,
-        storeId,
-        name,
-        category,
-        cleanPrice,
-        cleanStock || 0,
-        image,
-        description || "",
-      ],
+       (store_id, name, category, price, stock, is_active, image, description) 
+       VALUES (?, ?, ?, ?, ?, 1, ?, ?)`,
+      [storeId, name, category, price, stock, image, description],
     );
 
     res.redirect("/seller/products");
   } catch (error) {
     console.error("Error addProduct:", error);
-    res.status(500).send("Gagal menambahkan produk.");
+    res.status(500).send("Gagal menambahkan produk");
   }
 };
 
@@ -125,10 +105,10 @@ const editProductPage = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
-    // Pastikan produk milik toko seller ini
+    // 💡 PERBAIKAN: Gunakan userId
     const [rows] = await db.query(
-      "SELECT * FROM products WHERE id = ? AND (store_id = ? OR seller_id = ?)",
-      [id, storeId, storeId],
+      "SELECT * FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
+      [id, storeId, userId],
     );
 
     if (rows.length === 0) {
@@ -167,10 +147,10 @@ const updateProduct = async (req, res) => {
       stock ? stock.toString().replace(/[^0-9]/g, "") : 0,
     );
 
-    // Ambil data produk lama
+    // 💡 PERBAIKAN: Gunakan userId
     const [oldProduct] = await db.query(
-      "SELECT image FROM products WHERE id = ? AND (store_id = ? OR seller_id = ?)",
-      [id, storeId, storeId],
+      "SELECT image FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
+      [id, storeId, userId],
     );
 
     if (oldProduct.length === 0) {
@@ -184,7 +164,7 @@ const updateProduct = async (req, res) => {
     await db.query(
       `UPDATE products 
        SET name = ?, category = ?, price = ?, stock = ?, image = ?, description = ? 
-       WHERE id = ? AND (store_id = ? OR seller_id = ?)`,
+       WHERE id = ? AND (store_id = ? OR store_id = ?)`,
       [
         name,
         category,
@@ -194,11 +174,10 @@ const updateProduct = async (req, res) => {
         description,
         id,
         storeId,
-        storeId,
+        userId, // <--- Sudah diubah ke userId
       ],
     );
 
-    // ✅ FIX: Redirect ke halaman daftar produk setelah update berhasil
     res.redirect("/seller/products");
   } catch (error) {
     console.error("Error updating product:", error);
@@ -219,9 +198,10 @@ const deleteProduct = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
+    // 💡 PERBAIKAN: Gunakan userId
     await db.query(
-      "DELETE FROM products WHERE id = ? AND (store_id = ? OR seller_id = ?)",
-      [id, storeId, storeId],
+      "DELETE FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
+      [id, storeId, userId],
     );
 
     res.redirect("/seller/products");
@@ -244,9 +224,10 @@ const toggleStatus = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
+    // 💡 PERBAIKAN: Gunakan userId
     await db.query(
-      "UPDATE products SET is_active = NOT is_active WHERE id = ? AND (store_id = ? OR seller_id = ?)",
-      [id, storeId, storeId],
+      "UPDATE products SET is_active = NOT is_active WHERE id = ? AND (store_id = ? OR store_id = ?)",
+      [id, storeId, userId],
     );
 
     res.redirect("/seller/products");

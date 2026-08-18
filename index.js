@@ -11,6 +11,7 @@ const { isAuthenticated, authorizeRole } = require("./src/middleware/auth");
 const authRoutes = require("./src/routes/auth");
 const sellerRoutes = require("./src/routes/sellerRoutes");
 const buyerRoutes = require("./src/routes/buyerRoutes");
+const adminRoutes = require("./src/routes/adminRoutes");
 
 // Database Connection
 const db = require("./src/database/db_connection");
@@ -38,7 +39,7 @@ app.use(
 );
 
 // ==========================================
-// 3. VIEW ENGINE & EXPRESS EJS LAYOUTS
+// 3. VIEW ENGINE & STATIC FILES
 // ==========================================
 app.set("view engine", "ejs");
 const viewsDir = path.join(__dirname, "views");
@@ -48,7 +49,10 @@ app.set("views", viewsDir);
 app.use(expressLayouts);
 app.set("layout", "layouts/main"); // Mengarahkan ke views/layouts/main.ejs
 
-// Static Files
+// 💡 STATIC FILES (SUDAH DITAMBAHKAN FOLDER PUBLIC & UPLOADS)
+app.use(express.static(path.join(__dirname, "public"))); // Akses utama ke public/
+app.use("/uploads", express.static(path.join(__dirname, "public", "uploads"))); // Direct path ke uploads
+
 app.use(
   "/stylesheet",
   express.static(path.join(__dirname, "views", "stylesheet")),
@@ -93,35 +97,11 @@ app.use(async (req, res, next) => {
 // 1. Auth Routes (/login, /register, /logout)
 app.use("/", authRoutes);
 
-// 2. Seller Center Routes (WAJIB DIPANGGUL SEBELUM BUYER ROUTES)
+// 2. Seller Center Routes (WAJIB DIPANGGIL SEBELUM BUYER ROUTES)
 app.use("/seller", sellerRoutes);
 
 // 3. Admin Protected Routes (Wajib Role Admin)
-app.get("/admin", isAuthenticated, authorizeRole("admin"), (req, res) => {
-  res.render("pages/Admin/index", { title: `Admin Dashboard - ${WEB_TITLE}` });
-});
-
-app.get(
-  "/admin/sellers",
-  isAuthenticated,
-  authorizeRole("admin"),
-  (req, res) => {
-    res.render("pages/Admin/Sellermanage/index", {
-      title: `Kelola Seller - ${WEB_TITLE}`,
-    });
-  },
-);
-
-app.get(
-  "/admin/sellers/:id/edit",
-  isAuthenticated,
-  authorizeRole("admin"),
-  (req, res) => {
-    res.render("pages/Admin/Sellermanage/Edit/index", {
-      title: `Edit Seller - ${WEB_TITLE}`,
-    });
-  },
-);
+app.use("/admin", adminRoutes);
 
 // 4. Public & Buyer Routes (PASANG PALING AKHIR)
 app.use("/", buyerRoutes);

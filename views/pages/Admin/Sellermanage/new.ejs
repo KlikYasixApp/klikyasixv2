@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'Edit Seller' %></title>
+  <title><%= typeof title !== 'undefined' ? title : 'Tambah Seller Baru' %></title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,75 +17,74 @@
     </a>
 
     <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h1 class="text-xl font-black text-slate-900 tracking-tight">Edit Account & Store Seller</h1>
-      <p class="mt-1 text-xs text-slate-500">Perbarui informasi akun pemilik dan nama toko.</p>
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+        <i data-lucide="store" class="h-6 w-6"></i>
+      </div>
 
-      <form action="/admin/sellers/<%= seller.user_id %>?_method=PUT" method="POST" class="mt-6 space-y-4">
+      <h1 class="mt-4 text-xl font-black text-slate-900 tracking-tight">Tambah Akun Seller Baru</h1>
+      <p class="mt-1 text-xs text-slate-500">Buat akun seller dan toko kantin baru secara langsung.</p>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-600">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/admin/sellers" method="POST" class="mt-6 space-y-4">
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-700" for="name">Nama Pemilik</label>
+          <label class="mb-1 block text-xs font-bold text-slate-700" for="name">Nama Pemilik Toko <span class="text-rose-500">*</span></label>
           <input
             id="name"
             name="name"
             type="text"
-            value="<%= seller.name %>"
+            placeholder="Contoh: Ibu Ani"
             class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:bg-white"
             required
           />
         </div>
 
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-700" for="store_name">Nama Toko</label>
+          <label class="mb-1 block text-xs font-bold text-slate-700" for="store_name">Nama Toko Kantin <span class="text-rose-500">*</span></label>
           <input
             id="store_name"
             name="store_name"
             type="text"
-            value="<%= seller.store_name %>"
+            placeholder="Contoh: Kantin Ibu Ani"
             class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:bg-white"
             required
           />
         </div>
 
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-700" for="email">Email Account</label>
+          <label class="mb-1 block text-xs font-bold text-slate-700" for="email">Email Login <span class="text-rose-500">*</span></label>
           <input
             id="email"
             name="email"
             type="email"
-            value="<%= seller.email %>"
+            placeholder="seller@kantin.com"
             class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:bg-white"
             required
           />
         </div>
 
         <div>
-          <label class="mb-1 block text-xs font-bold text-slate-700" for="phone">Nomor Telepon</label>
+          <label class="mb-1 block text-xs font-bold text-slate-700" for="password">Password <span class="text-rose-500">*</span></label>
           <input
-            id="phone"
-            name="phone"
-            type="text"
-            value="<%= seller.phone || '' %>"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
             class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:bg-white"
+            required
           />
-        </div>
-
-        <div>
-          <label class="mb-1 block text-xs font-bold text-slate-700" for="is_open">Status Operasional Toko</label>
-          <select
-            id="is_open"
-            name="is_open"
-            class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-indigo-500 focus:bg-white"
-          >
-            <option value="1" <%= seller.is_open ? 'selected' : '' %>>Buka (Operasional)</option>
-            <option value="0" <%= !seller.is_open ? 'selected' : '' %>>Tutup (Nonaktif)</option>
-          </select>
         </div>
 
         <button
           type="submit"
           class="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 text-xs font-bold text-white shadow-md hover:bg-indigo-700 transition"
         >
-          <i data-lucide="save" class="h-4 w-4"></i>
-          Simpan Perubahan Data
+          <i data-lucide="plus" class="h-4 w-4"></i>
+          Daftarkan Seller Baru
         </button>
       </form>
     </div>

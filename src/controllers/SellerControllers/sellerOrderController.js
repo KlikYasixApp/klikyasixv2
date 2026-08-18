@@ -7,9 +7,9 @@ const getOrders = async (req, res) => {
       return res.redirect("/login");
     }
 
-    const userId = req.session.user.id; // User ID = 2
+    const userId = req.session.user.id;
 
-    // CARI STORE ID BERDASARKAN USER ID (KUNCI UTAMA)
+    // CARI STORE ID BERDASARKAN USER ID
     const [stores] = await db.query("SELECT id FROM stores WHERE user_id = ?", [
       userId,
     ]);
@@ -18,12 +18,12 @@ const getOrders = async (req, res) => {
       return res.status(404).send("Toko tidak ditemukan.");
     }
 
-    const storeId = stores[0].id; // Store ID = 1
+    const storeId = stores[0].id;
 
-    // QUERY ORDERS MENGGUNAKAN storeId (BUKAN userId)
+    // 💡 PERBAIKAN: Gunakan store_id, bukan store_id
     const [orders] = await db.query(
       `SELECT * FROM orders 
-       WHERE seller_id = ? 
+       WHERE store_id = ? 
        ORDER BY created_at DESC`,
       [storeId],
     );
@@ -59,7 +59,7 @@ const updateOrderStatus = async (req, res) => {
 
     const { orderId } = req.params;
     const { status } = req.body;
-    const userId = req.session.user.id; // User ID = 2
+    const userId = req.session.user.id;
 
     // 1. CARI STORE ID DARI USER ID LOGIN
     const [stores] = await db.query("SELECT id FROM stores WHERE user_id = ?", [
@@ -70,11 +70,11 @@ const updateOrderStatus = async (req, res) => {
       return res.status(404).send("Toko tidak ditemukan.");
     }
 
-    const storeId = stores[0].id; // Store ID = 1
+    const storeId = stores[0].id;
 
-    // 2. UPDATE PESANAN MENGGUNAKAN storeId DENGAN TEPAT
+    // 💡 PERBAIKAN: Gunakan store_id, bukan store_id
     const [result] = await db.query(
-      "UPDATE orders SET status = ? WHERE id = ? AND seller_id = ?",
+      "UPDATE orders SET status = ? WHERE id = ? AND store_id = ?",
       [status, orderId, storeId],
     );
 

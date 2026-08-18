@@ -49,6 +49,7 @@
               src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80"
               alt="Makanan kantin"
               class="h-[360px] w-full object-cover"
+              loading="lazy"
             />
             <div class="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/30 bg-white/90 p-4 shadow-lg backdrop-blur">
               <div class="flex items-center justify-between">
@@ -88,8 +89,9 @@
             <div>
               <div class="relative h-48 w-full overflow-hidden bg-slate-100">
                 <img
-                  src="<%= item.image || item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80' %>"
+                  src="<%= item.image ? (item.image.startsWith('http') ? item.image : '/uploads/products/' + item.image) : 'https://via.placeholder.com/150' %>" alt="<%= item.name %>"
                   alt="<%= item.name %>"
+                  loading="lazy"
                   class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                 />
                 <span class="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold capitalize text-blue-700 backdrop-blur">

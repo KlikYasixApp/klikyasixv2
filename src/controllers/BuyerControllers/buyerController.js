@@ -1,13 +1,12 @@
 const db = require("../../database/db_connection");
 
-// 1. KATALOG MENU (Hanya Toko Buka & Produk Aktif)
-// 1. KATALOG MENU (Fix ON clause JOIN)
+// 1. KATALOG MENU
 const getCatalog = async (req, res) => {
   try {
     const [products] = await db.query(
       `SELECT p.*, s.store_name 
        FROM products p 
-       JOIN stores s ON p.seller_id = s.id 
+       JOIN stores s ON p.store_id = s.id 
        WHERE s.is_open = 1 AND p.is_active = 1 
        ORDER BY p.id DESC 
        LIMIT 4`,
@@ -27,7 +26,6 @@ const getCatalog = async (req, res) => {
 };
 
 // 2. KERANJANG (CART)
-// GET KERANJANG
 const getCart = (req, res) => {
   const cart = req.session.cart || [];
 
@@ -38,17 +36,15 @@ const getCart = (req, res) => {
 };
 
 // 3. TAMBAH KE KERANJANG
-// 3. TAMBAH KE KERANJANG
 const addToCart = async (req, res) => {
   const { product_id, quantity } = req.body;
   const qty = parseInt(quantity, 10) || 1;
 
   try {
-    // JOIN menggunakan s.id sebagai kunci utama tabel stores
     const [products] = await db.query(
       `SELECT p.*, s.store_name 
        FROM products p 
-       JOIN stores s ON p.seller_id = s.id 
+       JOIN stores s ON p.store_id = s.id 
        WHERE p.id = ? AND s.is_open = 1 AND p.is_active = 1`,
       [product_id],
     );
@@ -72,10 +68,9 @@ const addToCart = async (req, res) => {
     if (existingIndex > -1) {
       req.session.cart[existingIndex].quantity += qty;
     } else {
-      // Menyimpan seller_id ke dalam session cart agar aman untuk checkout
       req.session.cart.push({
         id: product.id,
-        seller_id: product.seller_id,
+        store_id: product.store_id, // 💡 SIMPAN store_id KELAS KERANJANG
         store_name: product.store_name,
         name: product.name,
         price: Number(product.price),
@@ -144,16 +139,16 @@ const processCheckout = async (req, res) => {
       0,
     );
 
-    // Ambil seller_id dari item pertama di keranjang
-    const sellerId = cart[0].seller_id;
+    // 💡 AMBIL store_id DARI KERANJANG
+    const storeId = cart[0].store_id;
 
-    // 1. Insert ke tabel orders (sesuai struktur DDL database)
+    // 💡 INSERT MENGGUNAKAN store_id PADA TABEL orders
     const [orderResult] = await connection.query(
-      `INSERT INTO orders (buyer_id, seller_id, customer_name, total_price, status, order_type, table_number, notes) 
+      `INSERT INTO orders (buyer_id, store_id, customer_name, total_price, status, order_type, table_number, notes) 
        VALUES (?, ?, ?, ?, 'pending', ?, ?, ?)`,
       [
         buyer_id,
-        sellerId,
+        storeId,
         customerName,
         totalPrice,
         order_type || "dine-in",
@@ -164,7 +159,6 @@ const processCheckout = async (req, res) => {
 
     const orderId = orderResult.insertId;
 
-    // 2. Format item untuk batch insert ke order_items
     const orderItemsData = cart.map((item) => [
       orderId,
       item.id,
@@ -178,20 +172,13 @@ const processCheckout = async (req, res) => {
     );
 
     await connection.commit();
-
-    // Reset keranjang belanja setelah sukses
     req.session.cart = [];
-
-    // Redirect ke halaman utama / status order
     res.redirect("/orders");
   } catch (error) {
     await connection.rollback();
-
     console.error("=== ERROR DETAIL CHECKOUT ===");
     console.error("SQL Message:", error.sqlMessage || error.message);
-    console.error("SQL State:", error.sqlState);
     console.error("==============================");
-
     res
       .status(500)
       .send(`Gagal memproses pesanan: ${error.sqlMessage || error.message}`);
@@ -200,24 +187,22 @@ const processCheckout = async (req, res) => {
   }
 };
 
-// GET ALL ORDERS (Daftar Pesanan Saya)
-// GET ALL ORDERS (Daftar Pesanan Saya)
+// GET ALL ORDERS
 const getOrders = async (req, res) => {
   const buyer_id = req.session.user ? req.session.user.id : null;
-  const newOrderId = req.query.new_order || null; // Untuk pesan banner sukses jika ada query param
+  const newOrderId = req.query.new_order || null;
 
   try {
-    // Ambil semua daftar pesanan milik buyer
     const [orders] = await db.query(
+      // 💡 JOIN MENGGUNAKAN o.store_id = s.id
       `SELECT o.*, s.store_name 
        FROM orders o 
-       JOIN stores s ON o.seller_id = s.id 
+       JOIN stores s ON o.store_id = s.id 
        WHERE o.buyer_id = ? OR ? IS NULL
        ORDER BY o.id DESC`,
       [buyer_id, buyer_id],
     );
 
-    // Ambil detail items untuk setiap pesanan
     for (let order of orders) {
       const [items] = await db.query(
         `SELECT oi.*, p.name AS product_name, p.image 
@@ -249,11 +234,11 @@ const getOrderDetail = async (req, res) => {
   const orderId = req.params.id;
 
   try {
-    // 1. Ambil data utama order
     const [orders] = await db.query(
+      // 💡 JOIN MENGGUNAKAN o.store_id = s.id
       `SELECT o.*, s.store_name 
        FROM orders o 
-       JOIN stores s ON o.seller_id = s.id 
+       JOIN stores s ON o.store_id = s.id 
        WHERE o.id = ?`,
       [orderId],
     );
@@ -264,7 +249,6 @@ const getOrderDetail = async (req, res) => {
 
     const order = orders[0];
 
-    // 2. Ambil rincian produk pesanan
     const [items] = await db.query(
       `SELECT oi.*, p.name AS product_name, p.image 
        FROM order_items oi 
@@ -284,7 +268,7 @@ const getOrderDetail = async (req, res) => {
   }
 };
 
-// GET ALL PRODUCTS (Halaman Katalog Produk Lengkap)
+// GET ALL PRODUCTS
 const getAllProducts = async (req, res) => {
   const { search } = req.query;
 
@@ -292,12 +276,11 @@ const getAllProducts = async (req, res) => {
     let query = `
       SELECT p.*, s.store_name 
       FROM products p 
-      JOIN stores s ON p.seller_id = s.id 
+      JOIN stores s ON p.store_id = s.id 
       WHERE s.is_open = 1 AND p.is_active = 1
     `;
     const queryParams = [];
 
-    // Fitur pencarian sederhana jika ada query ?search=
     if (search) {
       query += ` AND (p.name LIKE ? OR s.store_name LIKE ?)`;
       queryParams.push(`%${search}%`, `%${search}%`);
@@ -330,7 +313,7 @@ const getProductDetail = async (req, res) => {
     const [products] = await db.query(
       `SELECT p.*, s.store_name, s.is_open 
        FROM products p 
-       JOIN stores s ON p.seller_id = s.id 
+       JOIN stores s ON p.store_id = s.id 
        WHERE p.id = ? AND p.is_active = 1`,
       [productId],
     );
@@ -343,14 +326,13 @@ const getProductDetail = async (req, res) => {
 
     const product = products[0];
 
-    // Ambil produk rekomendasi dari toko yang sama
     const [relatedProducts] = await db.query(
       `SELECT p.*, s.store_name 
        FROM products p 
-       JOIN stores s ON p.seller_id = s.id 
-       WHERE p.seller_id = ? AND p.id != ? AND p.is_active = 1 AND s.is_open = 1 
+       JOIN stores s ON p.store_id = s.id 
+       WHERE p.store_id = ? AND p.id != ? AND p.is_active = 1 AND s.is_open = 1 
        LIMIT 4`,
-      [product.seller_id, productId],
+      [product.store_id, productId],
     );
 
     res.render("pages/Products/detail", {
