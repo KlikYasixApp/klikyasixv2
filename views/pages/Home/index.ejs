@@ -115,7 +115,7 @@
                   <p class="font-bold text-slate-900">Rp <%= Number(item.price).toLocaleString('id-ID') %></p>
                 </div>
                 
-                <form action="/carts/add" method="POST">
+                <form action="/carts" method="POST">
                   <input type="hidden" name="product_id" value="<%= item.id %>">
                   <input type="hidden" name="quantity" value="1">
                   <button type="submit" class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition hover:bg-blue-600 hover:text-white cursor-pointer">

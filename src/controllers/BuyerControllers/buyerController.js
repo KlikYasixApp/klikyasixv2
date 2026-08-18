@@ -183,7 +183,7 @@ const processCheckout = async (req, res) => {
     req.session.cart = [];
 
     // Redirect ke halaman utama / status order
-    res.redirect("/");
+    res.redirect("/orders");
   } catch (error) {
     await connection.rollback();
 

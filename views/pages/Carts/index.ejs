@@ -76,7 +76,7 @@
                   <!-- Control Jumlah (Quantity) -->
                   <div class="flex items-center rounded-xl border border-slate-200 bg-slate-50/50">
                     <!-- Tombol Minus -->
-                    <form action="/carts/add" method="POST" class="inline">
+                    <form action="/carts" method="POST" class="inline">
                       <input type="hidden" name="product_id" value="<%= item.id %>">
                       <input type="hidden" name="quantity" value="-1">
                       <button
@@ -93,7 +93,7 @@
                     </span>
 
                     <!-- Tombol Plus -->
-                    <form action="/carts/add" method="POST" class="inline">
+                    <form action="/carts" method="POST" class="inline">
                       <input type="hidden" name="product_id" value="<%= item.id %>">
                       <input type="hidden" name="quantity" value="1">
                       <button
