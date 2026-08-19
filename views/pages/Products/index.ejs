@@ -54,7 +54,7 @@
             <a href="/products/<%= product.id %>" class="relative block h-52 overflow-hidden bg-slate-100">
               <% if (product.image) { %>
                 <img
-                  src="<%= product.image ? (product.image.startsWith('http') ? product.image : '/uploads/products/' + product.image) : 'https://via.placeholder.com/150' %>" alt="<%= product.name %>"
+                  src="<%= imageUrl(product.image) || '/yadika.png' %>"
                   alt="<%= product.name %>"
                   loading="lazy"
                   class="h-full w-full object-cover transition duration-500 group-hover:scale-105"

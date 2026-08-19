@@ -36,7 +36,6 @@ const createProduct = async (req, res) => {
       });
     }
 
-    // 💡 PERBAIKAN: Bersihkan titik/koma format ribuan sebelum diubah ke Number
     const cleanPrice = Number(price.toString().replace(/[^0-9]/g, ""));
     const cleanStock = Number(stock.toString().replace(/[^0-9]/g, ""));
 

@@ -90,10 +90,10 @@
                 <!-- KOLOM FOTO PRODUK -->
                 <td class="px-6 py-4">
                   <img 
-                    src="<%= product.image ? (product.image.startsWith('http') ? product.image : '/uploads/products/' + product.image) : 'https://via.placeholder.com/150' %>" 
+                    src="<%= imageUrl(product.image) || '/yadika.png' %>" 
                     alt="<%= product.name %>"
                     class="h-12 w-12 rounded-xl object-cover border border-slate-200"
-                    onerror="this.onerror=null; this.src='https://via.placeholder.com/150';"
+                    onerror="this.onerror=null; this.src='/yadika.png';"
                   />
                 </td>
 

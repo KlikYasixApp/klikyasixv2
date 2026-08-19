@@ -82,11 +82,18 @@
           <% items.forEach(item => { %>
             <div class="flex items-center justify-between py-3">
               <div class="flex items-center gap-3">
-                <img
-                  src="<%= item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80' %>"
-                  alt="<%= item.product_name %>"
-                  class="h-12 w-12 rounded-xl object-cover bg-slate-100 shrink-0"
-                />
+                <% if (imageUrl(item.image)) { %>
+                  <img
+                    src="<%= imageUrl(item.image) %>"
+                    alt="<%= item.product_name %>"
+                    class="h-12 w-12 rounded-xl object-cover bg-slate-100 shrink-0"
+                    onerror="this.onerror=null; this.src='/yadika.png';"
+                  />
+                <% } else { %>
+                  <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-300">
+                    <i data-lucide="utensils" class="h-5 w-5"></i>
+                  </div>
+                <% } %>
                 <div>
                   <h4 class="font-bold text-slate-900 text-sm"><%= item.product_name %></h4>
                   <p class="text-xs text-slate-400">
@@ -121,11 +128,9 @@
   }
 
   <% if (order.status !== 'completed' && order.status !== 'cancelled') { %>
-    console.log("Status pesanan: '<%= order.status %>'. Auto-refresh aktif setiap 10 detik...");
-    
     setInterval(() => {
       window.location.reload();
-    }, 10000); // Reload setiap 10 detik
+    }, 10000);
   <% } %>
   
 </script>

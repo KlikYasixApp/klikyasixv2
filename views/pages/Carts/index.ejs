@@ -39,11 +39,18 @@
             <div class="flex gap-4">
               <!-- Gambar Makanan / Minuman -->
               <div class="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-28 sm:w-28">
-                <img
-                  src="<%= item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80' %>"
-                  alt="<%= item.name %>"
-                  class="h-full w-full object-cover"
-                />
+                <% if (imageUrl(item.image)) { %>
+                  <img
+                    src="<%= imageUrl(item.image) %>"
+                    alt="<%= item.name %>"
+                    class="h-full w-full object-cover"
+                    onerror="this.onerror=null; this.src='/yadika.png';"
+                  />
+                <% } else { %>
+                  <div class="flex h-full w-full items-center justify-center text-slate-300">
+                    <i data-lucide="utensils" class="h-8 w-8"></i>
+                  </div>
+                <% } %>
               </div>
 
               <!-- Detail Makanan -->

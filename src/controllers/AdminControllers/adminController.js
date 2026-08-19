@@ -49,7 +49,6 @@ const getDashboard = async (req, res) => {
  */
 const getSellers = async (req, res) => {
   try {
-    // 💡 DIUBAH: Dihapus u.phone dari SELECT
     const [sellers] = await db.query(
       `SELECT u.id as user_id, u.name, u.email, u.created_at,
               s.id as store_id, s.store_name, s.is_open,
@@ -77,7 +76,6 @@ const editSellerPage = async (req, res) => {
   try {
     const { id } = req.params; // user_id seller
 
-    // 💡 DIUBAH: Dihapus u.phone dari SELECT
     const [sellers] = await db.query(
       `SELECT u.id as user_id, u.name, u.email, 
               s.id as store_id, s.store_name, s.is_open 
@@ -109,7 +107,6 @@ const updateSeller = async (req, res) => {
     const { id } = req.params; // user_id
     const { name, email, store_name, is_open } = req.body;
 
-    // 💡 DIUBAH: UPDATE users tanpa kolom phone
     await db.query(
       "UPDATE users SET name = ?, email = ? WHERE id = ? AND role = 'seller'",
       [name, email, id],

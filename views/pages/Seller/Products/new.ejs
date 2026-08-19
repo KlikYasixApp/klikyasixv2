@@ -42,7 +42,6 @@
         Masukkan informasi detail produk kantin Anda di bawah ini.
       </p>
 
-      <!-- 💡 FORM (Diisi enctype="multipart/form-data") -->
       <form 
         action="<%= isEdit ? ('/seller/products/' + formData.id + '?_method=PUT') : '/seller/products' %>" 
         method="POST" 
@@ -120,7 +119,6 @@
           />
         </div>
 
-        <!-- 💡 INPUT GAMBAR FILE WITH PREVIEW -->
         <div>
           <label class="mb-2 block text-sm font-bold text-slate-700" for="image">
             Foto Produk
@@ -129,10 +127,10 @@
           <% if (isEdit && formData.image) { %>
             <div class="mb-3 flex items-center gap-3">
               <img 
-                src="<%= formData.image.startsWith('http') ? formData.image : '/uploads/products/' + formData.image %>" 
+                src="<%= imageUrl(formData.image) || '/yadika.png' %>" 
                 alt="Preview" 
                 class="h-16 w-16 rounded-xl object-cover border border-slate-200"
-                onerror="this.src='https://via.placeholder.com/150'"
+                onerror="this.onerror=null; this.src='/yadika.png'"
               />
               <span class="text-xs text-slate-500">Foto saat ini: <%= formData.image %></span>
             </div>

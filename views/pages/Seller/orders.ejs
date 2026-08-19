@@ -114,15 +114,13 @@
     }
 
     <% 
-    // Cek apakah di daftar pesanan ada yang statusnya belum selesai/batal
     const hasPendingOrProcessing = orders && orders.some(o => o.status === 'pending' || o.status === 'processing');
   %>
 
   <% if (hasPendingOrProcessing) { %>
-    console.log("Ada pesanan butuh tindakan seller. Auto-refresh aktif...");
     setInterval(() => {
       window.location.reload();
-    }, 10000); // Reload tiap 10 detik
+    }, 10000);
   <% } %>
   </script>
 </body>
