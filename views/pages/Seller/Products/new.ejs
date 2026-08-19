@@ -129,10 +129,10 @@
           <% if (isEdit && formData.image) { %>
             <div class="mb-3 flex items-center gap-3">
               <img 
-                src="<%= formData.image.startsWith('http') ? formData.image : '/uploads/products/' + formData.image %>" 
+                src="<%= imageUrl(formData.image) || '/yadika.png' %>" 
                 alt="Preview" 
                 class="h-16 w-16 rounded-xl object-cover border border-slate-200"
-                onerror="this.src='https://via.placeholder.com/150'"
+                onerror="this.onerror=null; this.src='/yadika.png'"
               />
               <span class="text-xs text-slate-500">Foto saat ini: <%= formData.image %></span>
             </div>

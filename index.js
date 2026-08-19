@@ -68,6 +68,11 @@ app.use(async (req, res, next) => {
   // 1. Menyediakan User Session & Title di seluruh View EJS
   res.locals.user = req.session.user || null;
   res.locals.WEB_TITLE = WEB_TITLE;
+  res.locals.imageUrl = (image) => {
+    if (!image) return null;
+    if (/^(https?:)?\/\//i.test(image) || image.startsWith("/")) return image;
+    return `/uploads/products/${image}`;
+  };
 
   // 2. Jika login sebagai Seller, ambil status Toko dari database (pake user_id)
   if (res.locals.user && res.locals.user.role === "seller") {

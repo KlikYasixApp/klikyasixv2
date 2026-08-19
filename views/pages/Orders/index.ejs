@@ -76,11 +76,18 @@
                 <% order.items.forEach((item) => { %>
                   <div class="flex gap-4 p-5">
                     <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                      <img
-                        src="<%= item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80' %>"
-                        alt="<%= item.product_name %>"
-                        class="h-full w-full object-cover"
-                      />
+                      <% if (imageUrl(item.image)) { %>
+                        <img
+                          src="<%= imageUrl(item.image) %>"
+                          alt="<%= item.product_name %>"
+                          class="h-full w-full object-cover"
+                          onerror="this.onerror=null; this.src='/yadika.png';"
+                        />
+                      <% } else { %>
+                        <div class="flex h-full w-full items-center justify-center text-slate-300">
+                          <i data-lucide="utensils" class="h-6 w-6"></i>
+                        </div>
+                      <% } %>
                     </div>
 
                     <div class="min-w-0 flex-1">

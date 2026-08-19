@@ -45,7 +45,7 @@
         <div class="hidden sm:block relative overflow-hidden rounded-[2rem] border border-white bg-white p-3 shadow-2xl shadow-slate-900/10">
           <div class="relative overflow-hidden rounded-[1.5rem]">
             <img
-              src="kantin.png"
+              src="/kantin.png"
               alt="Kantin SMK Yadika 6"
               class="h-[360px] w-full object-cover"
               loading="lazy"
@@ -88,7 +88,7 @@
             <div>
               <div class="relative h-48 w-full overflow-hidden bg-slate-100">
                 <img
-                  src="<%= item.image ? (item.image.startsWith('http') ? item.image : '/uploads/products/' + item.image) : 'https://via.placeholder.com/150' %>" 
+                  src="<%= imageUrl(item.image) || '/yadika.png' %>" 
                   alt="<%= item.name %>"
                   loading="lazy"
                   class="h-full w-full object-cover transition duration-300 group-hover:scale-105"

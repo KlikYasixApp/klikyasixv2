@@ -127,8 +127,8 @@
                 name="order_type"
                 class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
               >
-                <option value="dine-in" selected>Makan di Tempat (Dine-in)</option>
-                <option value="takeaway">Bawa Pulang (Takeaway)</option>
+                <option value="dine-in" selected>Makan di Kantin (Ditempat)</option>
+                <option value="takeaway">Bawa Ke Kelas (Bungkus)</option>
               </select>
             </div>
 
@@ -146,13 +146,8 @@
                 class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
               >
                 <option value="">Pilih waktu pengambilan</option>
-                <option value="09:00 - 09:30" selected>09:00 - 09:30</option>
-                <option value="09:30 - 10:00">09:30 - 10:00</option>
-                <option value="10:00 - 10:30">10:00 - 10:30</option>
-                <option value="10:30 - 11:00">10:30 - 11:00</option>
-                <option value="11:00 - 11:30">11:00 - 11:30</option>
-                <option value="11:30 - 12:00">11:30 - 12:00</option>
-                <option value="12:00 - 12:30">12:00 - 12:30</option>
+                <option value="10:00 - 10:20">10:00 - 10:20 (Istirahat Ke-1)</option>
+                <option value="12:15 - 12:45">12:15 - 12:45 (Istirahat Ke-2)</option>
               </select>
             </div>
           </div>
@@ -193,11 +188,12 @@
           <div class="mt-5 space-y-4 max-h-80 overflow-y-auto pr-1">
             <% items.forEach((item) => { %>
               <div class="flex gap-3">
-                <% if (item.image) { %>
+                <% if (imageUrl(item.image)) { %>
                   <img
-                    src="<%= item.image %>"
+                    src="<%= imageUrl(item.image) %>"
                     alt="<%= item.name %>"
                     class="h-14 w-14 rounded-xl object-cover shrink-0 bg-slate-100"
+                    onerror="this.onerror=null; this.src='/yadika.png';"
                   />
                 <% } else { %>
                   <div class="h-14 w-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-400">
