@@ -1,11 +1,9 @@
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs"); // 💡 Import modul fs
+const fs = require("fs");
 
-// Path direktori tujuan upload
 const uploadDir = path.join(__dirname, "../../public/uploads/products");
 
-// 💡 Otomatis buat folder public/uploads/products jika belum ada
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

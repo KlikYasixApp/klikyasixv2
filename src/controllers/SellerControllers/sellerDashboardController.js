@@ -8,7 +8,6 @@ const getDashboard = async (req, res) => {
   try {
     const userId = req.session.user.id;
 
-    // 1. Ambil Store berdasarkan User ID
     const [stores] = await db.query(
       "SELECT id, store_name FROM stores WHERE user_id = ?",
       [userId],
@@ -20,7 +19,6 @@ const getDashboard = async (req, res) => {
 
     const storeId = stores[0].id;
 
-    // 2. Query Pesanan Pending (💡 PERBAIKAN: Gunakan store_id, bukan seller_id)
     const [newOrdersResult] = await db.query(
       `SELECT COUNT(*) AS new_orders_count 
        FROM orders 
@@ -30,7 +28,6 @@ const getDashboard = async (req, res) => {
 
     const newOrdersCount = newOrdersResult[0].new_orders_count || 0;
 
-    // 3. Query 5 Pesanan Terbaru (💡 PERBAIKAN: Gunakan store_id, bukan seller_id)
     const [recentOrders] = await db.query(
       `SELECT id, status FROM orders WHERE store_id = ? ORDER BY id DESC LIMIT 5`,
       [storeId],

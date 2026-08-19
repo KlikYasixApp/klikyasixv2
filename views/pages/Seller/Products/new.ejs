@@ -42,7 +42,6 @@
         Masukkan informasi detail produk kantin Anda di bawah ini.
       </p>
 
-      <!-- 💡 FORM (Diisi enctype="multipart/form-data") -->
       <form 
         action="<%= isEdit ? ('/seller/products/' + formData.id + '?_method=PUT') : '/seller/products' %>" 
         method="POST" 
@@ -120,7 +119,6 @@
           />
         </div>
 
-        <!-- 💡 INPUT GAMBAR FILE WITH PREVIEW -->
         <div>
           <label class="mb-2 block text-sm font-bold text-slate-700" for="image">
             Foto Produk

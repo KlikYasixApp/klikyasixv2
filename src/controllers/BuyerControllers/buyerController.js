@@ -1,6 +1,5 @@
 const db = require("../../database/db_connection");
 
-// 1. KATALOG MENU
 const getCatalog = async (req, res) => {
   try {
     const [products] = await db.query(
@@ -25,7 +24,6 @@ const getCatalog = async (req, res) => {
   }
 };
 
-// 2. KERANJANG (CART)
 const getCart = (req, res) => {
   const cart = req.session.cart || [];
 
@@ -35,7 +33,6 @@ const getCart = (req, res) => {
   });
 };
 
-// 3. TAMBAH KE KERANJANG
 const addToCart = async (req, res) => {
   const { product_id, quantity } = req.body;
   const qty = parseInt(quantity, 10) || 1;
@@ -70,7 +67,7 @@ const addToCart = async (req, res) => {
     } else {
       req.session.cart.push({
         id: product.id,
-        store_id: product.store_id, // 💡 SIMPAN store_id KELAS KERANJANG
+        store_id: product.store_id,
         store_name: product.store_name,
         name: product.name,
         price: Number(product.price),
@@ -86,7 +83,6 @@ const addToCart = async (req, res) => {
   }
 };
 
-// 4. HAPUS ITEM CART
 const removeFromCart = (req, res) => {
   const productId = parseInt(req.params.id, 10);
   if (req.session.cart) {
@@ -95,7 +91,6 @@ const removeFromCart = (req, res) => {
   res.redirect("/carts");
 };
 
-// 5. GET CHECKOUT
 const getCheckout = (req, res) => {
   const cart = req.session.cart || [];
 
@@ -116,7 +111,6 @@ const getCheckout = (req, res) => {
   });
 };
 
-// 6. POST PROCESS CHECKOUT
 const processCheckout = async (req, res) => {
   const cart = req.session.cart || [];
   const { name, table_number, order_type, notes } = req.body;
@@ -139,10 +133,8 @@ const processCheckout = async (req, res) => {
       0,
     );
 
-    // 💡 AMBIL store_id DARI KERANJANG
     const storeId = cart[0].store_id;
 
-    // 💡 INSERT MENGGUNAKAN store_id PADA TABEL orders
     const [orderResult] = await connection.query(
       `INSERT INTO orders (buyer_id, store_id, customer_name, total_price, status, order_type, table_number, notes) 
        VALUES (?, ?, ?, ?, 'pending', ?, ?, ?)`,
@@ -187,14 +179,12 @@ const processCheckout = async (req, res) => {
   }
 };
 
-// GET ALL ORDERS
 const getOrders = async (req, res) => {
   const buyer_id = req.session.user ? req.session.user.id : null;
   const newOrderId = req.query.new_order || null;
 
   try {
     const [orders] = await db.query(
-      // 💡 JOIN MENGGUNAKAN o.store_id = s.id
       `SELECT o.*, s.store_name 
        FROM orders o 
        JOIN stores s ON o.store_id = s.id 
@@ -229,13 +219,11 @@ const getOrders = async (req, res) => {
   }
 };
 
-// GET ORDER DETAIL
 const getOrderDetail = async (req, res) => {
   const orderId = req.params.id;
 
   try {
     const [orders] = await db.query(
-      // 💡 JOIN MENGGUNAKAN o.store_id = s.id
       `SELECT o.*, s.store_name 
        FROM orders o 
        JOIN stores s ON o.store_id = s.id 
@@ -268,7 +256,6 @@ const getOrderDetail = async (req, res) => {
   }
 };
 
-// GET ALL PRODUCTS
 const getAllProducts = async (req, res) => {
   const { search } = req.query;
 
@@ -305,7 +292,6 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// GET PRODUCT DETAIL
 const getProductDetail = async (req, res) => {
   const productId = req.params.id;
 

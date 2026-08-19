@@ -20,10 +20,10 @@ async function resetPasswords() {
       "buyer@kantin.local",
     ]);
 
-    console.log("✅ Semua password akun demo berhasil di-reset!");
+    console.log("Password akun demo berhasil di-reset.");
     process.exit();
   } catch (err) {
-    console.error("❌ Gagal reset password:", err.message);
+    console.error("Gagal reset password:", err.message);
     process.exit(1);
   }
 }

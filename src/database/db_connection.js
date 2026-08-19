@@ -1,7 +1,6 @@
 require("dotenv").config();
 const mysql = require("mysql2/promise");
 
-// Buat Connection Pool menggunakan data dari .env
 const db = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   user: process.env.DB_USER || "root",
@@ -12,10 +11,9 @@ const db = mysql.createPool({
   queueLimit: 0,
 });
 
-// Tes koneksi saat file diakses
 db.getConnection()
   .then((connection) => {
-    console.log(`✅ Database ${process.env.DB_NAME} berhasil terhubung!`);
+    console.log(`Database ${process.env.DB_NAME} berhasil terhubung.`);
     connection.release();
   })
   .catch((err) => {

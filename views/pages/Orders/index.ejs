@@ -154,20 +154,17 @@
 
 
 <script>
-  // Init Lucide Icons
   try {
     if (typeof lucide !== 'undefined') {
       lucide.createIcons();
     }
   } catch (e) {
-    console.warn("Lucide error:", e);
+    return;
   }
 
-  // LOGIKA AUTO REFRESH UNTUK HAK AKSES BUYER (DAFTAR ORDERS)
   <% 
     var hasActiveOrders = false;
     if (typeof orders !== 'undefined' && Array.isArray(orders)) {
-      // Cek apakah ada minimal 1 pesanan yang statusnya belum selesai/batal
       hasActiveOrders = orders.some(function(o) {
         return o.status !== 'completed' && o.status !== 'cancelled';
       });
@@ -175,11 +172,9 @@
   %>
 
   <% if (hasActiveOrders) { %>
-    console.log("🟢 Ada pesanan aktif. Auto-refresh aktif setiap 10 detik...");
     setInterval(() => {
       window.location.reload();
-    }, 10000); // Auto-reload 10 detik
+    }, 10000);
   <% } else { %>
-    console.log("⚪ Tidak ada pesanan aktif. Auto-refresh non-aktif.");
   <% } %>
 </script>

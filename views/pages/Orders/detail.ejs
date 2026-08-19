@@ -128,11 +128,9 @@
   }
 
   <% if (order.status !== 'completed' && order.status !== 'cancelled') { %>
-    console.log("Status pesanan: '<%= order.status %>'. Auto-refresh aktif setiap 10 detik...");
-    
     setInterval(() => {
       window.location.reload();
-    }, 10000); // Reload setiap 10 detik
+    }, 10000);
   <% } %>
   
 </script>

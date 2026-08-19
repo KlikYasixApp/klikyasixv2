@@ -28,14 +28,9 @@ const getProducts = async (req, res) => {
         .send("Toko tidak ditemukan untuk akun seller ini.");
     }
 
-    // 💡 PERBAIKAN: Gunakan userId untuk mencocokkan store_id
     const [products] = await db.query(
       "SELECT * FROM products WHERE store_id = ? OR store_id = ? ORDER BY id DESC",
       [storeId, userId],
-    );
-
-    console.log(
-      `📦 [DEBUG GET PRODUCTS] User: ${userId} | Store: ${storeId} | Found: ${products.length} items`,
     );
 
     res.render("pages/Seller/Products/index", {
@@ -58,7 +53,7 @@ const renderCreateForm = (req, res) => {
 
   res.render("pages/Seller/Products/new", {
     title: "Tambah Produk Baru - Klik Yasix",
-    product: null, // product: null mengindikasikan Mode Tambah
+    product: null,
   });
 };
 
@@ -72,12 +67,11 @@ const addProduct = async (req, res) => {
     }
 
     const userId = req.session.user.id;
-    const storeId = await getStoreIdByUserId(userId); // Ambil ID toko yang benar
+    const storeId = await getStoreIdByUserId(userId);
 
     const { name, category, price, stock, description } = req.body;
     const image = req.file ? req.file.filename : null;
 
-    // ✅ PERBAIKAN: Pastikan 'store_id' hanya ditulis SATU KALI saja
     await db.query(
       `INSERT INTO products 
        (store_id, name, category, price, stock, is_active, image, description) 
@@ -105,7 +99,6 @@ const editProductPage = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
-    // 💡 PERBAIKAN: Gunakan userId
     const [rows] = await db.query(
       "SELECT * FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
       [id, storeId, userId],
@@ -147,7 +140,6 @@ const updateProduct = async (req, res) => {
       stock ? stock.toString().replace(/[^0-9]/g, "") : 0,
     );
 
-    // 💡 PERBAIKAN: Gunakan userId
     const [oldProduct] = await db.query(
       "SELECT image FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
       [id, storeId, userId],
@@ -174,7 +166,7 @@ const updateProduct = async (req, res) => {
         description,
         id,
         storeId,
-        userId, // <--- Sudah diubah ke userId
+        userId,
       ],
     );
 
@@ -198,7 +190,6 @@ const deleteProduct = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
-    // 💡 PERBAIKAN: Gunakan userId
     await db.query(
       "DELETE FROM products WHERE id = ? AND (store_id = ? OR store_id = ?)",
       [id, storeId, userId],
@@ -224,7 +215,6 @@ const toggleStatus = async (req, res) => {
     const userId = req.session.user.id;
     const storeId = await getStoreIdByUserId(userId);
 
-    // 💡 PERBAIKAN: Gunakan userId
     await db.query(
       "UPDATE products SET is_active = NOT is_active WHERE id = ? AND (store_id = ? OR store_id = ?)",
       [id, storeId, userId],
